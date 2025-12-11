@@ -1,0 +1,33 @@
+## Node / build
+node_modules/
+dist/
+build/
+
+# dotenv
+.env
+.env.*.local
+.env.local
+.env.test
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Credentials / service accounts
+serviceAccount.json
+*.serviceAccount.json
+google-credentials.json
+# Common env var that points to a file — ignore absolute paths if accidentally placed
+GOOGLE_APPLICATION_CREDENTIALS
+
+# Optional: lockfile for alternative package managers (don't ignore if you use them intentionally)
+# pnpm-lock.yaml
+# package-lock.json
