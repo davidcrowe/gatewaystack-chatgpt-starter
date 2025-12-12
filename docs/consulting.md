@@ -124,4 +124,4 @@ A: This starter repo (TypeScript/Node.js) is our default, but we adapt to your s
 
 ---
 
-**Ready to make your tools available in ChatGPT?** [Get in touch →](reducibl.com)
+**Ready to make your tools available in ChatGPT?** [Get in touch →](https://reducibl.com)

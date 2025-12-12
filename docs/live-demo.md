@@ -1,6 +1,6 @@
 # Live Demo: Use This MCP Server Directly From ChatGPT (No Code Required)
 
-**Expose internal tools to LLMs securely — in 2 minutes**
+**Expose internal tools to LLMs — securely — in 2 minutes**
 
 <video src="https://github.com/user-attachments/assets/aa14fce5-442d-4fec-9a76-33d20e5b2ae0" controls width="100%"></video>
 
@@ -21,13 +21,13 @@ This is a public demo deployment of `gatewaystack-chatgpt-starter`.
 * Demo tools are read-only
 * Access may be rate-limited, reset, or disabled at any time
 
-The goal is to demonstrate the exact ChatGPT MCP + OAuth flow you would deploy in your own environment — not a toy or mock.
+The goal is to demonstrate the exact ChatGPT MCP + OAuth flow you would deploy in your own environment.
 
 ## What you need
 
 You only need:
 
-* Access to **ChatGPT Enterprise or Plus**
+* Access to **ChatGPT Enterprise** or **Plus**
 * A browser where you can complete OAuth login
 
 You do **not** need:
@@ -49,8 +49,6 @@ This deployment exposes:
 * MCP endpoint: `POST /mcp`
 * OAuth discovery: `/.well-known/*`
 
----
-
 ## Add the MCP server to ChatGPT
 
 <video src="https://github.com/user-attachments/assets/35c4b40e-a213-4a0b-a6c8-c31fdb978fef" controls width="100%"></video>
@@ -66,7 +64,15 @@ This deployment exposes:
 
 ### Step 2: Add a new MCP server
 
-1. Navigate to **Settings → Apps & Connectors** (exact label may vary)
+> ✅ **No client secret required.**
+>
+> This demo uses OAuth discovery + Dynamic Client Registration (DCR), so ChatGPT registers its own OAuth client and completes login without you copy/pasting credentials.
+>
+> ChatGPT acts as a public OAuth client using PKCE and Dynamic Client Registration.
+> 
+> This mirrors how production MCP integrations are expected to work — per-client registration, no shared secrets.
+
+1. Navigate to **Settings → Apps & Connectors**
 2. Click **Create app**
 3. Fill in the form:
 
@@ -75,14 +81,6 @@ This deployment exposes:
    - **Authentication:** OAuth (automatic via discovery)   
 4. Check the "I understand and want to continue" box
 5. Click **Create**
-
-> ✅ **No client secret required.**
->
-> This demo uses OAuth discovery + Dynamic Client Registration (DCR), so ChatGPT registers its own OAuth client and completes login without you copy/pasting credentials.
->
-> ChatGPT acts as a public OAuth client using PKCE and Dynamic Client Registration.
-> 
-> This mirrors how production MCP integrations are expected to work — per-client registration, no shared secrets.
 
 ![MCP server configuration form with the MCP URL filled in.](../assets/live-demo-2.png)
 
@@ -116,7 +114,7 @@ You should receive a response showing:
 
 ![ChatGPT response showing the `whoami` output with sub, scopes, and permissions.](../assets/live-demo-3.png)
 
-If this works, the entire identity + authorization chain is live:
+This is a live demonstration of the end-to-end identity + authorization chain:
 
 **User → ChatGPT → MCP server → tool execution**
 
