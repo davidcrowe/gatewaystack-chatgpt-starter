@@ -57,7 +57,10 @@ export async function handleMcp(req: Request, res: Response) {
   setCorsHeaders(res, true);
   console.log("[mcp:req]", { path: (req as any).path ?? req.url, method: req.method });
 
-  if (req.method === "OPTIONS") { res.status(204).end(); return; }
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
 
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, error: { code: "METHOD_NOT_ALLOWED" } });
@@ -106,7 +109,9 @@ export async function handleMcp(req: Request, res: Response) {
       await verifyBearer(req);
     } catch (e: any) {
       res.setHeader("WWW-Authenticate", e?.www || buildWwwAuthenticate(req));
-      res.status(Number(e?.status) || 401).json(jsonRpcError(rpc.id ?? null, -32001, e?.message || "Unauthorized"));
+      res
+        .status(Number(e?.status) || 401)
+        .json(jsonRpcError(rpc.id ?? null, -32001, e?.message || "Unauthorized"));
       return;
     }
 
@@ -135,19 +140,38 @@ export async function handleMcp(req: Request, res: Response) {
       }
     }
 
-    let uid: string, payload: any;
     try {
-      const verified = await verifyBearerAndScopes(req, name);
-      ({ uid, payload } = verified);
+      await verifyBearerAndScopes(req, name);
     } catch (e: any) {
       res.setHeader("WWW-Authenticate", e?.www || buildWwwAuthenticate(req));
-      res.status(Number(e?.status) || 401).json(jsonRpcError(rpc.id ?? null, -32001, e?.message || "Unauthorized"));
+      res
+        .status(Number(e?.status) || 401)
+        .json(jsonRpcError(rpc.id ?? null, -32001, e?.message || "Unauthorized"));
       return;
     }
 
-    // ✅ Pattern 1: forward original OAuth token to backend
     const accessToken = getBearerToken(req);
-    const raw = await getProxyablClientForRequest(req).callTool(name, args, accessToken);
+
+    let raw: any;
+    try {
+      raw = await getProxyablClientForRequest(req).callTool(name, args, accessToken);
+    } catch (e: any) {
+      // Proxyabl throws on non-2xx (e.g. Tool whoami failed: 401)
+      const msg = e?.message || String(e);
+      const status =
+        typeof e?.status === "number" ? e.status :
+        typeof e?.statusCode === "number" ? e.statusCode :
+        undefined;
+
+      const baseResult: any = {
+        isError: true,
+        content: [{ type: "text" as const, text: `Tool ${name} failed${status ? ` (${status})` : ""}: ${msg}` }],
+      };
+
+      // Return MCP success envelope with isError result (standard MCP tool behavior)
+      res.status(200).json(jsonRpcResult(rpc.id ?? null, baseResult));
+      return;
+    }
 
     const payloadOut = raw;
     const isJson = typeof payloadOut === "object" && payloadOut !== null;
@@ -157,7 +181,14 @@ export async function handleMcp(req: Request, res: Response) {
 
     const baseResult: any = {
       isError: !httpOk,
-      content: [{ type: "text" as const, text: summaryText || (isJson ? JSON.stringify(payloadOut).slice(0, 800) : String(payloadOut ?? "")) }],
+      content: [
+        {
+          type: "text" as const,
+          text:
+            summaryText ||
+            (isJson ? JSON.stringify(payloadOut).slice(0, 800) : String(payloadOut ?? "")),
+        },
+      ],
     };
 
     if (isJson) {
