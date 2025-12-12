@@ -155,7 +155,7 @@ These are minimal demo tools. In production, you'd replace these with tools that
 * **No tools listed** → Required scopes missing from the access token
 * **Connection timeout** → Demo server may be under heavy load or rate-limited
 
-See [troubleshooting.md](troubleshooting.md) for detailed fixes.
+See [troubleshooting.md](./troubleshooting.md) for detailed fixes.
 
 ## What's different from production?
 
@@ -177,14 +177,14 @@ The **authentication and authorization patterns are identical** — only the ide
 
 If this demo makes sense and you want to build your own:
 
-* Deploy your own instance → [deploy-your-own.md](deploy-your-own.md)
-* Set up Auth0 → [auth0-setup-guide.md](auth0-setup-guide.md)
-* Use another IdP → [other-idps.md](other-idps.md)
+* Deploy your own instance → [deploy-your-own.md](./deploy-your-own.md)
+* Set up Auth0 → [auth0-setup-guide.md](./auth0-setup-guide.md)
+* Use another IdP → [other-idps.md](./other-idps.md)
 
 ### Option 2: Understand the architecture
 
 * Read the main [README.md](../README.md) for the three-party problem explanation
-* Review the [backend integration pattern](backend-integration-pattern.md)
+* Review the [backend integration pattern](./backend-integration-pattern.md)
 * Check out the [repo structure](../README.md#repo-layout)
 
 ### Option 3: Build custom tools
@@ -198,7 +198,7 @@ If this demo makes sense and you want to build your own:
 * **Can't access ChatGPT MCP features?** → Check with your workspace admin or OpenAI support
 * **Demo server not responding?** → The demo may be experiencing high traffic or maintenance
 * **Want to understand the code?** → See the main [README.md](../README.md) and repo documentation
-* **Ready to deploy your own?** → See [deploy-your-own.md](deploy-your-own.md)
+* **Ready to deploy your own?** → See [deploy-your-own.md](./deploy-your-own.md)
 
 ## Contact
 
@@ -207,4 +207,4 @@ This demo exists to remove friction — the real value is in adapting the patter
 Powered by **[GatewayStack](https://github.com/gatewaystack)**.
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-Need help implementing your organization's tools in ChatGPT or Claude?  We offer [implementation services](consulting.md)
+Need help implementing your organization's tools in ChatGPT or Claude?  Check out our [implementation services](./consulting.md)

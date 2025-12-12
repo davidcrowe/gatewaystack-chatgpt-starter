@@ -34,7 +34,7 @@ The demo runs this exact codebase on Cloud Run via Cloud Build CI/CD. It lets yo
 
 It's ideal for demos, evaluations, internal pilots, and understanding how ChatGPT MCP + OAuth actually works in practice.
 
-> **Test it yourself in ChatGPT** with no code → [live-demo.md](docs/live_demo.md)
+> **Test it yourself in ChatGPT** with no code → [live-demo.md](./docs/live_demo.md)
 
 ## Quick Start
 ```bash
@@ -102,8 +102,8 @@ This starter is **IdP-agnostic**. It works with any OAuth 2.0 / OIDC provider
 that can issue **JWT access tokens (JWS)**.
 
 Guides included:
-- **Auth0** → [auth0-setup-guide.md](docs/auth0-setup-guide.md)
-- **Other IdPs (Okta, Azure AD, Google, etc.)** → [other-idps.md](docs/other-idps.md)
+- **Auth0** → [auth0-setup-guide.md](./docs/auth0-setup-guide.md)
+- **Other IdPs (Okta, Azure AD, Google, etc.)** → [other-idps.md](./docs/other-idps.md)
 
 The gateway enforces:
 - issuer
@@ -132,7 +132,7 @@ This repo supports multiple deployment styles:
 - **Cloud Run via Cloud Build (CI/CD from GitHub)** ← recommended
 - Any Node-compatible container runtime
 
-See **[deploy-your-own.md](docs/deploy-your-own.md)** for:
+See **[deploy-your-own.md](./docs/deploy-your-own.md)** for:
 - CI/CD setup
 - Cloud Run configuration
 - How to confirm your revision is live
@@ -200,4 +200,4 @@ This repository is the reference implementation of **[GatewayStack's](https://gi
 
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-[Need help](../docs/consulting.md)? We help teams implement this pattern correctly in weeks instead of months — including IdP integration, security review support, and internal rollout. 
+[Need help](./docs/consulting.md)? We help teams implement this pattern correctly in weeks instead of months — including IdP integration, security review support, and internal rollout. 
