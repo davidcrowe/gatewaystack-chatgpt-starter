@@ -84,8 +84,17 @@ export async function requireJwt(req: AuthedRequest, res: Response, next: NextFu
     };
 
     return next();
-  } catch (e: any) {
-    console.warn("[demo-api] jwt verify failed", { message: e?.message || String(e) });
-    return res.status(401).json({ ok: false, error: "invalid_token" });
-  }
+} catch (e: any) {
+  try {
+    const token = asBearer(req);
+    if (token) {
+      const [, p] = token.split(".");
+      const payload = JSON.parse(Buffer.from(p, "base64url").toString("utf8"));
+      console.warn("[demo-api] token iss/aud (debug)", { iss: payload.iss, aud: payload.aud });
+    }
+  } catch {}
+  console.warn("[demo-api] jwt verify failed", { message: e?.message || String(e) });
+  return res.status(401).json({ ok: false, error: "invalid_token" });
+}
+
 }
