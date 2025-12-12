@@ -36,10 +36,6 @@ console.log("[toolGatewayHandler] module loaded");
 
 export { OAUTH_ISSUER, OAUTH_AUDIENCE, OAUTH_SCOPES };
 
-// ---------- Proxyabl config ----------
-const proxyablConfig = proxyablConfigFromEnv(process.env);
-export const proxyablClient = createProxyablClient(proxyablConfig);
-
 // ---------- Explicabl config ----------
 const explicablLogger = createConsoleLogger({
   serviceName: "tool-gateway",
@@ -58,6 +54,72 @@ function getBearerToken(req: Request): string {
   const auth = req.header("authorization") || "";
   if (!auth.startsWith("Bearer ")) return "";
   return auth.slice(7);
+}
+
+/**
+ * Derive the externally reachable base URL for *this* Cloud Run service from the request.
+ * This is the safest default when your tools are hosted on the same server (e.g. /demo/*).
+ */
+function getPublicBaseUrl(req: Request): string {
+  const proto = (req.header("x-forwarded-proto") ?? (req as any).protocol ?? "https")
+    .split(",")[0]
+    .trim();
+
+  const host = (req.header("x-forwarded-host") ?? req.header("host") ?? "")
+    .split(",")[0]
+    .trim();
+
+  if (!host) throw new Error("Missing Host header; cannot derive public base URL");
+
+  return `${proto}://${host}`;
+}
+
+/**
+ * Guardrails so we never pass an invalid URL into fetch().
+ */
+function assertValidBaseUrl(baseUrl: string): void {
+  if (!baseUrl) throw new Error("Proxyabl baseUrl is empty");
+  if (/\$\{[^}]+\}/.test(baseUrl)) {
+    throw new Error(`Proxyabl baseUrl contains an unexpanded \${...} placeholder: ${baseUrl}`);
+  }
+  if ((process.env.NODE_ENV ?? "dev") === "production" && /localhost/i.test(baseUrl)) {
+    throw new Error(`Proxyabl baseUrl must not be localhost in production: ${baseUrl}`);
+  }
+  // Throws if invalid
+  new URL(baseUrl);
+}
+
+/**
+ * Build a Proxyabl client whose upstream base URL is:
+ * 1) explicitly configured via env (preferred for calling a different service), else
+ * 2) derived from request (best for "tools hosted on same service" pattern).
+ *
+ * This prevents the "http://localhost:${PORT}" class of failures.
+ */
+export function getProxyablClientForRequest(req: Request) {
+  const cfg = proxyablConfigFromEnv(process.env) as any;
+
+  // Try a few common config keys (depending on how proxyabl-core names it)
+  // If you know the exact key, keep only that one.
+  const configuredBase =
+    process.env.PROXYABL_UPSTREAM_BASE_URL ||
+    process.env.TOOLS_BASE_URL ||
+    process.env.TOOL_BASE_URL ||
+    cfg?.upstreamBaseUrl ||
+    cfg?.baseUrl ||
+    cfg?.upstream?.baseUrl;
+
+  const baseUrl = (configuredBase ? String(configuredBase) : getPublicBaseUrl(req)).replace(/\/+$/, "");
+
+  assertValidBaseUrl(baseUrl);
+
+  // Mutate config for the client in the shape it expects.
+  // We set multiple possibilities to be resilient across versions.
+  cfg.baseUrl = baseUrl;
+  cfg.upstreamBaseUrl = baseUrl;
+  cfg.upstream = { ...(cfg.upstream ?? {}), baseUrl };
+
+  return createProxyablClient(cfg);
 }
 
 // ---------- Tool gateway (main handler) ----------
@@ -149,8 +211,6 @@ async function baseToolGatewayImplv3(req: Request, res: Response): Promise<void>
       return;
     }
 
-    const xfProto = req.get("x-forwarded-proto") || (req as any).protocol || "https";
-    const xfHost = req.get("x-forwarded-host") || req.get("host") || "";
     const issuer = OAUTH_ISSUER.replace(/\/+$/, "");
 
     const doc = {
@@ -232,7 +292,7 @@ async function baseToolGatewayImplv3(req: Request, res: Response): Promise<void>
       return;
     }
 
-    // ✅ Pattern 1: forward the original OAuth access token to the backend
+    // forward the original OAuth access token to the backend
     const accessToken = getBearerToken(req);
     if (!accessToken) {
       res.setHeader("WWW-Authenticate", buildWwwAuthenticate(req));
@@ -243,6 +303,9 @@ async function baseToolGatewayImplv3(req: Request, res: Response): Promise<void>
       });
       return;
     }
+
+    // ✅ Build a safe client for this request (prevents localhost:${PORT} issues)
+    const proxyablClient = getProxyablClientForRequest(req);
 
     const raw = await proxyablClient.callTool(name, req.body ?? {}, accessToken);
 

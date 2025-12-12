@@ -15,7 +15,7 @@ import {
   verifyBearerAndScopes,
   logAuthShape,
 } from "./authHelpers";
-import { proxyablClient } from "../gateway/toolGateway";
+import { getProxyablClientForRequest } from "../gateway/toolGateway";
 import { setCorsHeaders } from "./httpHelpers";
 
 type JsonRpcReq = {
@@ -147,7 +147,7 @@ export async function handleMcp(req: Request, res: Response) {
 
     // ✅ Pattern 1: forward original OAuth token to backend
     const accessToken = getBearerToken(req);
-    const raw = await proxyablClient.callTool(name, args, accessToken);
+    const raw = await getProxyablClientForRequest(req).callTool(name, args, accessToken);
 
     const payloadOut = raw;
     const isJson = typeof payloadOut === "object" && payloadOut !== null;
