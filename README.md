@@ -3,44 +3,70 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
-Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates data leakage, policy bypass, and audit gaps.
+Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 
 - Users want AI to access *their* data (ChatGPT reading *my* calendar). 
 - Enterprises want to control *who* can use AI models (only doctors can use medical models, only directors can send sensitive prompts). 
+- Auditors want to know *who* asked *which* model to do *what* and *when* 
 
-Both the LLM and your backend require **cryptographic proof of user identity** tied to every AI request... but AI platforms authenticate users on their side while your backend has no verified identity to enforce policies, filter data, or log actions. This is the [three-party problem](https://raw.githubusercontent.com/davidcrowe/GatewayStack/main/docs/three-party-problem.md).
+Both the LLM and your backend require **cryptographic proof of user identity** tied to every AI request... but AI platforms authenticate users on their side while your backend has no verified identity to enforce policies, filter data, or log actions. This is the [three-party problem](https://github.com/davidcrowe/GatewayStack/blob/main/docs/three-party-problem.md).
 
-This repo implements a solution to the three-party problem to help build OAuth-protected **MCP tool servers** that work in ChatGPT with **real user-scoped access**.
+This repo implements a solution to the three-party problem. This starter code builds **MCP tool servers** to make your tools and apps available inside of ChatGPT with **real user-scoped access**.
 
-**User → ChatGPT (LLM) → Your MCP Server → (optional) Your Backend**
+**User → ChatGPT (LLM) → Your MCP Server → Your Backend**
 
-It handles:
+This repo handles:
 - OAuth discovery (so ChatGPT prompts login when needed)
 - JWT verification + per-tool scope enforcement
 - Mapping the OAuth subject → your internal user id (`uid`)
 - Forwarding the **same OAuth access token** downstream (end-to-end OAuth)
+
+## Try it live (no code required)
+
+- **Live Demo** → [live-demo.md](../docs/live_demo.md)
+
+Connect ChatGPT directly to a **live deployed demo** of this MCP server to see OAuth + user identity working end-to-end.
+
+The demo runs this exact codebase on Cloud Run via Cloud Build CI/CD. It lets you experience the full MCP + OAuth flow without cloning, deploying, or configuring anything yourself.
+
+It's ideal for demos, evaluations, internal pilots, and understanding how ChatGPT MCP + OAuth actually works in practice.
+
+## Quick Start
+
+```bash
+   git clone https://github.com/davidcrowe/gatewaystack-chatgpt-starter
+   cd gatewaystack-chatgpt-starter
+   npm install
+   cp .env.example .env
+   # Edit .env with your OAuth config
+   npm run dev
+```
 
 ## Who this is for
 
 This starter is designed for teams building **ChatGPT tools that act on behalf of real users**.
 
 Typical use cases:
-- Internal tools for employees via **ChatGPT Enterprise**
+- Make internal tools available to employees via **ChatGPT Enterprise**
 - AI agents that need **user-scoped access** to company data
-- Platforms that require **SSO, auditing, and per-tool permissions**
-- Teams that want a **reference OAuth + MCP implementation** (not a toy plugin)
+- Internal AI platforms that require **SSO, auditing, and per-tool permissions**
+- Teams looking for a **reference OAuth + MCP implementation**
 
 If you only need a shared API-key tool, this is probably more than you need.
+If you don't need user-scoped data access for your resource or tool, this is more than you need.
+
 If you need **real identity and authorization**, this is the right pattern.
+If you want people to access their data from your multi-tenant database through ChatGPT, this is for you.
 
 ## What you get
 
-✅ MCP JSON-RPC endpoints (`initialize`, `tools/list`, `tools/call`) at `POST /mcp`  
-✅ OAuth discovery endpoints (`/.well-known/*`) for ChatGPT OAuth discovery  
-✅ JWT verification via `@gatewaystack/identifiabl` (issuer/audience/JWKS)  
-✅ Per-tool scope enforcement  
-✅ Tool execution proxy via `@gatewaystack/proxyabl` (optional)  
-✅ Structured request logging via `@gatewaystack/explicabl`
+- MCP JSON-RPC endpoints (`initialize`, `tools/list`, `tools/call`) at `POST /mcp`  
+- OAuth discovery endpoints (`/.well-known/*`) for ChatGPT OAuth discovery  
+- JWT verification via `@gatewaystack/identifiabl` (issuer/audience/JWKS)  
+- End-to-end Request Context object 
+- Per-tool scope enforcement  
+- Tool execution proxy via `@gatewaystack/proxyabl`
+- Structured Request Context logging via `@gatewaystack/explicabl`
 
 ## How it works
 
@@ -59,7 +85,7 @@ When ChatGPT calls your MCP server:
 - maps `sub` → `uid`
 3) Tool execution:
 - **Hello World tools** can run locally (pure functions)
-- OR you can forward to a backend using Proxyabl (and the backend verifies the same JWT)
+- OR you can forward to a backend using Proxyabl (the backend verifies the same JWT)
 
 **OAuth token all the way through**
 - Gateway verifies the JWT
@@ -72,8 +98,8 @@ This starter is **IdP-agnostic**. It works with any OAuth 2.0 / OIDC provider
 that can issue **JWT access tokens (JWS)**.
 
 Guides included:
-- **Auth0** → [AUTH0_SETUP.md](./AUTH0_SETUP.md)
-- **Other IdPs (Okta, Azure AD, Google, etc.)** → [OTHER_IDPS.md](./OTHER_IDPS.md)
+- **Auth0** → [auth0-setup-guide.md](../docs/auth0-setup-guide.md)
+- **Other IdPs (Okta, Azure AD, Google, etc.)** → [other-idps.md](../docs/other-idps.md)
 
 The gateway enforces:
 - issuer
@@ -96,32 +122,6 @@ You keep full control over identity mapping and authorization logic.
 - `GET /` (health)
 - `GET /debug-token` (verifies the bearer token and shows `sub/aud/scope`)
 
-## Quick Start (3 steps)
-```bash
-   git clone https://github.com/davidcrowe/gatewaystack-chatgpt-starter
-   cd gatewaystack-chatgpt-starter
-   npm install
-   cp .env.example .env
-   # Edit .env with your OAuth config
-   npm run dev
-```
-
-## Try it live (no code required)
-
-You can connect ChatGPT directly to a **live deployed demo** of this MCP server
-to see OAuth + user identity working end-to-end.
-
-The demo uses the same code and deployment pattern you would use in production.
-
-👉 See **[LIVE_DEMO.md](./LIVE_DEMO.md)**
-
-What you’ll see:
-- ChatGPT prompting for OAuth login
-- Tools becoming available after login
-- `whoami` returning your real user identity, scopes, and permissions
-
-This is the fastest way to understand how the system works.
-
 ## Deployment options
 
 This repo supports multiple deployment styles:
@@ -130,7 +130,7 @@ This repo supports multiple deployment styles:
 - **Cloud Run via Cloud Build (CI/CD from GitHub)** ← recommended
 - Any Node-compatible container runtime
 
-👉 See **[DEPLOY_YOUR_OWN.md](./DEPLOY_YOUR_OWN.md)** for:
+See **[deploy-your-own.md](../docs/deploy-your-own.md)** for:
 - CI/CD setup
 - Cloud Run configuration
 - How to confirm your revision is live
@@ -189,13 +189,16 @@ If you want a real backend:
 - **Backend integration pattern** → [docs/backend-integration-pattern.md](./docs/backend-integration-pattern.md)
 - **Env config guide** → [docs/env-config-guide.md](./docs/env-config-guide.md)
 
-Built by **[reducibl applied AI studio](https://reducibl.com)**  
-
-Powered by **[GatewayStack](https://github.com/gatewaystack)**.
-
 This repo is intended to be **forked and adapted**.
 It encodes a production-tested pattern for OAuth-protected MCP tools,
 so you don’t have to rediscover the hard parts yourself.
 
 If you’re building serious AI systems that need identity, authorization,
 and auditability, this is the foundation we use ourselves.
+
+Powered by **[GatewayStack](https://github.com/gatewaystack)**.
+
+Built by **[reducibl applied AI studio](https://reducibl.com)**  
+
+Need help implementing this for your organization?  
+→ See our [implementation services](../docs/consulting.md)

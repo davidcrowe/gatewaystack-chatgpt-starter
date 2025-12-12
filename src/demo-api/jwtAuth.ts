@@ -33,7 +33,8 @@ export type AuthedRequest = Request & {
     sub: string;
     scope?: string;
     permissions?: string[];
-    payload: any;
+    payload: Record<string, any>;
+    source?: "gateway" | "jwt";
   };
 };
 
@@ -61,11 +62,21 @@ export async function requireJwt(req: AuthedRequest, res: Response, next: NextFu
         scope: typeof gw.scope === "string" ? gw.scope : undefined,
         permissions: Array.isArray(gw.permissions) ? gw.permissions : undefined,
         payload: {
+          // Minimal SAFE claim set for demo display purposes
           sub: gw.sub,
           scope: gw.scope,
           permissions: gw.permissions,
-          _source: "gateway",
+          iss: gw.iss,
+          aud: gw.aud,
+          exp: gw.exp,
+          iat: gw.iat,
+          email: gw.email,
+          name: gw.name,
+          azp: gw.azp,
+          client_id: gw.client_id,
+          gty: gw.gty,
         },
+        source: "gateway",
       };
       return next();
     }
@@ -95,7 +106,7 @@ export async function requireJwt(req: AuthedRequest, res: Response, next: NextFu
       audience: OAUTH_AUDIENCE, // keep strict trust chain
     });
 
-    const sub = String(payload.sub || "");
+    const sub = String((payload as any).sub || "");
     if (!sub) return res.status(401).json({ ok: false, error: "token_missing_sub" });
 
     req.auth = {
@@ -104,7 +115,8 @@ export async function requireJwt(req: AuthedRequest, res: Response, next: NextFu
       permissions: Array.isArray((payload as any).permissions)
         ? ((payload as any).permissions as string[])
         : undefined,
-      payload,
+      payload: payload as any,
+      source: "jwt",
     };
 
     return next();

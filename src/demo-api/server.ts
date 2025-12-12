@@ -10,13 +10,13 @@ export function createDemoApiRouter() {
 
   router.use((req, _res, next) => {
     console.log("[runtime:req]", {
-        rev: process.env.K_REVISION,
-        sha: process.env.GIT_SHA,
-        path: req.path,
-        method: req.method,
+      rev: process.env.K_REVISION,
+      sha: process.env.GIT_SHA,
+      path: req.path,
+      method: req.method,
     });
     next();
-});
+  });
 
   // basic request logging
   router.use((req, _res, next) => {
@@ -38,11 +38,63 @@ export function createDemoApiRouter() {
 
     switch (toolName) {
       case "whoami": {
+        const a = req.auth!;
+        const p = (a.payload ?? {}) as any;
+
+        const now = Math.floor(Date.now() / 1000);
+        const exp = typeof p.exp === "number" ? p.exp : undefined;
+        const iat = typeof p.iat === "number" ? p.iat : undefined;
+
+        const expInSec = exp ? exp - now : undefined;
+        const expInMin = expInSec !== undefined ? Math.floor(expInSec / 60) : undefined;
+
+        // Safe, visual “per-user” proof without revealing secrets (not reversible)
+        const userKey = Buffer.from(String(a.sub)).toString("base64url").slice(0, 10);
+
+        // Make scope visually legible (space-separated OAuth scopes)
+        const scope =
+          typeof a.scope === "string" ? a.scope : typeof p.scope === "string" ? p.scope : "";
+        const scopeList = scope ? scope.split(" ").filter(Boolean) : [];
+
+        // Optional human-friendly fields (only if present in token)
+        const email = typeof p.email === "string" ? p.email : undefined;
+        const name = typeof p.name === "string" ? p.name : undefined;
+
+        // One-line “punchline” for demo readability
+        const proof = [
+          "✅ Verified OAuth JWT",
+          email ? `for ${email}` : `for sub ${String(a.sub).slice(0, 18)}…`,
+          expInMin !== undefined ? `(expires in ~${expInMin} min)` : "",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
         return res.json({
           ok: true,
-          sub: req.auth!.sub,
-          scope: req.auth!.scope ?? "",
-          permissions: req.auth!.permissions ?? [],
+          proof,
+          verified: true,
+          source: a.source ?? "jwt",
+          user: {
+            sub: a.sub,
+            user_key: userKey,
+            email: email ?? null,
+            name: name ?? null,
+          },
+          authorization: {
+            issuer: typeof p.iss === "string" ? p.iss : null,
+            audience: p.aud ?? null,
+            scope,
+            scope_list: scopeList,
+            permissions: a.permissions ?? (Array.isArray(p.permissions) ? p.permissions : []),
+            iat: iat ?? null,
+            exp: exp ?? null,
+            exp_in_seconds: expInSec ?? null,
+          },
+          request: {
+            requestId: (req as any).requestId ?? null,
+            rev: process.env.K_REVISION ?? null,
+            sha: process.env.GIT_SHA ?? null,
+          },
         });
       }
 

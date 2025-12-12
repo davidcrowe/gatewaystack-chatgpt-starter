@@ -10,9 +10,7 @@ export const TOOL_SCOPES: Record<string, string[]> = {
 };
 
 // Convenience: union of all required scopes (used for OAuth prompting)
-export const REQUIRED_SCOPES = Array.from(
-  new Set(Object.values(TOOL_SCOPES).flat())
-).sort();
+export const REQUIRED_SCOPES = Array.from(new Set(Object.values(TOOL_SCOPES).flat())).sort();
 
 // What ChatGPT sees when it calls tools/list
 export function mcpToolDescriptors() {
@@ -20,7 +18,7 @@ export function mcpToolDescriptors() {
     {
       name: "whoami",
       description:
-        "Return the current authenticated user identity (sub + scopes). Useful to verify user-scoped auth wiring.",
+        "Return an OAuth-verified identity proof panel (user + issuer/audience/scopes/expiry). Use to validate user-scoped auth end-to-end.",
       inputSchema: {
         type: "object",
         properties: {},
@@ -41,8 +39,7 @@ export function mcpToolDescriptors() {
     },
     {
       name: "seedMyNotes",
-      description:
-        "Create a few demo notes for the current user (stored by OAuth sub).",
+      description: "Create a few demo notes for the current user (stored by OAuth sub).",
       inputSchema: {
         type: "object",
         properties: {
@@ -53,8 +50,7 @@ export function mcpToolDescriptors() {
     },
     {
       name: "listMyNotes",
-      description:
-        "List the current user's notes (scoped by OAuth sub).",
+      description: "List the current user's notes (scoped by OAuth sub).",
       inputSchema: {
         type: "object",
         properties: {},
@@ -63,8 +59,7 @@ export function mcpToolDescriptors() {
     },
     {
       name: "addNote",
-      description:
-        "Add a note for the current user (scoped by OAuth sub).",
+      description: "Add a note for the current user (scoped by OAuth sub).",
       inputSchema: {
         type: "object",
         properties: {
@@ -87,11 +82,38 @@ export function summarizeToolResult(toolName: string, payload: any): string {
   }
 
   if (toolName === "whoami") {
-    const sub = p?.sub ?? "";
-    const scope = p?.scope ?? "";
-    const permissions = Array.isArray(p?.permissions) ? p.permissions : [];
-    const scopes = [scope, ...permissions].join(" ").trim();
-    return `You are sub=${sub || "(unknown)"} scopes=${scopes || "(none)"}`;
+    // Support BOTH old + new shapes, so you can deploy without breaking anything.
+    const proof = typeof p?.proof === "string" ? p.proof : null;
+
+    const user = p?.user ?? {};
+    const auth = p?.authorization ?? {};
+
+    const sub = user?.sub ?? p?.sub ?? "";
+    const email = user?.email ?? null;
+    const userKey = user?.user_key ?? null;
+
+    const scope = auth?.scope ?? p?.scope ?? "";
+    const scopeList = Array.isArray(auth?.scope_list) ? auth.scope_list : [];
+    const permissions = Array.isArray(auth?.permissions)
+      ? auth.permissions
+      : Array.isArray(p?.permissions)
+        ? p.permissions
+        : [];
+
+    const issuer = auth?.issuer ?? null;
+    const expInSec = typeof auth?.exp_in_seconds === "number" ? auth.exp_in_seconds : null;
+
+    const scopesPretty = [...scopeList, ...permissions].filter(Boolean).join(" ").trim();
+
+    // Keep it punchy in the chat surface:
+    if (proof) return proof;
+
+    const who = email ? `${email}` : sub ? `sub=${sub}` : "(unknown)";
+    const key = userKey ? ` user_key=${userKey}` : "";
+    const iss = issuer ? ` issuer=${issuer}` : "";
+    const exp = expInSec !== null ? ` exp_in=${Math.floor(expInSec / 60)}m` : "";
+
+    return `✅ Verified OAuth user: ${who}${key}${iss}${exp} scopes=${scopesPretty || scope || "(none)"}`;
   }
 
   if (toolName === "seedMyNotes") {
