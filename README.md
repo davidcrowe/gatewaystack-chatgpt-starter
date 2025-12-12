@@ -3,6 +3,9 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
+**Expose internal tools to LLMs — securely**
+Give your users secure access to *their* data from inside of ChatGPT
+
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 
 - Users want AI to access *their* data (ChatGPT reading *my* calendar). 
@@ -23,8 +26,6 @@ This repo handles:
 
 ## Try it live (no code required)
 
-> **Live Demo** → [live-demo.md](docs/live_demo.md)
-
 <video src="https://github.com/user-attachments/assets/aa14fce5-442d-4fec-9a76-33d20e5b2ae0" controls width="100%"></video>
 
 Connect ChatGPT directly to a **live deployed demo** of this MCP server to see OAuth + user identity working end-to-end.
@@ -32,6 +33,8 @@ Connect ChatGPT directly to a **live deployed demo** of this MCP server to see O
 The demo runs this exact codebase on Cloud Run via Cloud Build CI/CD. It lets you experience the full MCP + OAuth flow without cloning, deploying, or configuring anything yourself.
 
 It's ideal for demos, evaluations, internal pilots, and understanding how ChatGPT MCP + OAuth actually works in practice.
+
+> **Test it yourself in ChatGPT** with no code → [live-demo.md](docs/live_demo.md)
 
 ## Quick Start
 ```bash
@@ -66,6 +69,11 @@ If you want people to access their data from your multi-tenant database through 
 - Per-tool scope enforcement  
 - Tool execution proxy via `@gatewaystack/proxyabl`
 - Structured Request Context logging via `@gatewaystack/explicabl`
+
+## Why this repo exists
+
+Most MCP examples ignore identity, authorization, and auditability.
+This repo exists to establish the minimum viable security baseline for real AI tools.
 
 ## How it works
 > MCP (Model Context Protocol) is the current mechanism ChatGPT uses to connect to external tools with structured inputs, outputs, and authentication.
@@ -188,8 +196,8 @@ and auditability, this is the foundation we use ourselves.
 - **Backend integration pattern** → [docs/backend-integration-pattern.md](./docs/backend-integration-pattern.md)
 - **Env config guide** → [docs/env-config-guide.md](./docs/env-config-guide.md)
 
-Powered by **[GatewayStack](https://github.com/gatewaystack)**.
+This repository is the reference implementation of **[GatewayStack's](https://github.com/gatewaystack)** identity, authorization, and observability primitives for MCP servers
 
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-Need help implementing your organization's tools in ChatGPT or Claude?  We offer [implementation services](../docs/consulting.md)
+[Need help](../docs/consulting.md)? We help teams implement this pattern correctly in weeks instead of months — including IdP integration, security review support, and internal rollout. 
