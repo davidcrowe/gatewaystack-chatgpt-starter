@@ -22,8 +22,11 @@ This repo handles:
 - Forwarding the **same OAuth access token** downstream (end-to-end OAuth)
 
 ## Try it live (no code required)
+<p align="center">
+  <img src="../assets/using-the-whoami-tool.gif" alt="OAuth whoami demo" width="720" />
+</p>
 
-- **Live Demo** → [live-demo.md](../docs/live_demo.md)
+> **Live Demo** → [live-demo.md](../docs/live_demo.md)
 
 Connect ChatGPT directly to a **live deployed demo** of this MCP server to see OAuth + user identity working end-to-end.
 
@@ -32,7 +35,6 @@ The demo runs this exact codebase on Cloud Run via Cloud Build CI/CD. It lets yo
 It's ideal for demos, evaluations, internal pilots, and understanding how ChatGPT MCP + OAuth actually works in practice.
 
 ## Quick Start
-
 ```bash
    git clone https://github.com/davidcrowe/gatewaystack-chatgpt-starter
    cd gatewaystack-chatgpt-starter
@@ -43,7 +45,6 @@ It's ideal for demos, evaluations, internal pilots, and understanding how ChatGP
 ```
 
 ## Who this is for
-
 This starter is designed for teams building **ChatGPT tools that act on behalf of real users**.
 
 Typical use cases:
@@ -59,7 +60,6 @@ If you need **real identity and authorization**, this is the right pattern.
 If you want people to access their data from your multi-tenant database through ChatGPT, this is for you.
 
 ## What you get
-
 - MCP JSON-RPC endpoints (`initialize`, `tools/list`, `tools/call`) at `POST /mcp`  
 - OAuth discovery endpoints (`/.well-known/*`) for ChatGPT OAuth discovery  
 - JWT verification via `@gatewaystack/identifiabl` (issuer/audience/JWKS)  
@@ -69,11 +69,9 @@ If you want people to access their data from your multi-tenant database through 
 - Structured Request Context logging via `@gatewaystack/explicabl`
 
 ## How it works
-
 > MCP (Model Context Protocol) is the current mechanism ChatGPT uses to connect to external tools with structured inputs, outputs, and authentication.
 
 ### OAuth Flow Diagram
-
 ![OAuth Flow Diagram](https://raw.githubusercontent.com/davidcrowe/gatewaystack-chatgpt-starter/main/docs/oauth-flow-diagram.svg)
 
 When ChatGPT calls your MCP server:
@@ -93,7 +91,6 @@ When ChatGPT calls your MCP server:
 - Backend verifies JWT again and uses `sub` (or mapped `uid`) for user-scoped access
 
 ## Authentication & identity providers
-
 This starter is **IdP-agnostic**. It works with any OAuth 2.0 / OIDC provider
 that can issue **JWT access tokens (JWS)**.
 
@@ -110,7 +107,6 @@ The gateway enforces:
 You keep full control over identity mapping and authorization logic.
 
 ## Endpoints
-
 ### MCP
 - `POST /mcp`
 
@@ -123,7 +119,6 @@ You keep full control over identity mapping and authorization logic.
 - `GET /debug-token` (verifies the bearer token and shows `sub/aud/scope`)
 
 ## Deployment options
-
 This repo supports multiple deployment styles:
 
 - **Local development** (Express server)
@@ -172,7 +167,6 @@ If you want a real backend:
 - **ACCESS_TOKEN_IS_ENCRYPTED_JWE**: your auth provider is returning JWE; you need a JWS access token
 - **tools/list keeps prompting OAuth**: ChatGPT isn't seeing a valid `WWW-Authenticate` header (check `/.well-known/oauth-protected-resource` + your `buildWwwAuthenticate()`)
 
-
 ## Repo layout
 - `src/gateway/toolGateway.ts` → main HTTP handler (MCP + well-known + REST tools)
 - `src/handlers/*` → auth helpers, MCP handler, well-known handlers, misc helpers
@@ -180,6 +174,12 @@ If you want a real backend:
 - `src/server/expressServer.ts` → local dev server
 
 ## Documentation
+This repo is intended to be **forked and adapted**.
+It encodes a production-tested pattern for OAuth-protected MCP tools,
+so you don’t have to rediscover the hard parts yourself.
+
+If you’re building serious AI systems that need identity, authorization,
+and auditability, this is the foundation we use ourselves.
 
 - **Live demo** → [docs/live-demo.md](./docs/live-demo.md)
 - **Deploy your own instance** → [docs/deploy-your-own.md](./docs/deploy-your-own.md)
@@ -189,16 +189,8 @@ If you want a real backend:
 - **Backend integration pattern** → [docs/backend-integration-pattern.md](./docs/backend-integration-pattern.md)
 - **Env config guide** → [docs/env-config-guide.md](./docs/env-config-guide.md)
 
-This repo is intended to be **forked and adapted**.
-It encodes a production-tested pattern for OAuth-protected MCP tools,
-so you don’t have to rediscover the hard parts yourself.
-
-If you’re building serious AI systems that need identity, authorization,
-and auditability, this is the foundation we use ourselves.
-
 Powered by **[GatewayStack](https://github.com/gatewaystack)**.
 
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-Need help implementing this for your organization?  
-→ See our [implementation services](../docs/consulting.md)
+Need help implementing your organization's tools in ChatGPT or Claude?  We offer [implementation services](../docs/consulting.md)

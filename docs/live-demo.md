@@ -2,6 +2,10 @@
 
 **Spin up OAuth-protected ChatGPT tools in 2 minutes.**
 
+<p align="center">
+  <img src="../assets/using-the-whoami-tool.gif" alt="OAuth whoami demo" width="720" />
+</p>
+
 This guide shows how to connect ChatGPT to a live, running MCP server built from this repo — with OAuth login and real user identity, end to end.
 
 The demo deployment runs this exact codebase on Cloud Run via Cloud Build CI/CD. You can experience the full MCP + OAuth flow without cloning, deploying, or configuring anything yourself.
@@ -51,6 +55,10 @@ This deployment exposes:
 
 ## Add the MCP server to ChatGPT
 
+<p align="center">
+  <img src="../assets/connecting-the-mcp-server.gif" alt="Connecting the mcp server demo" width="720" />
+</p>
+
 ### Step 1: Open the MCP connectors UI
 
 1. Open ChatGPT
@@ -58,7 +66,7 @@ This deployment exposes:
 3. Scroll to the bottom and open **Advanced settings**
 4. Enable **developer mode**
 
-![ChatGPT settings page showing where MCP servers / connectors are managed.](../screenshots/live-demo-1.png)
+![ChatGPT settings page showing where MCP servers / connectors are managed.](../assets/live-demo-1.png)
 
 ### Step 2: Add a new MCP server
 
@@ -81,7 +89,7 @@ This deployment exposes:
 4. Check the "I understand and want to continue" box
 5. Click **Create**
 
-![MCP server configuration form with the MCP URL filled in.](../screenshots/live-demo-2.png)
+![MCP server configuration form with the MCP URL filled in.](../assets/live-demo-2.png)
 
 ## What happens behind the scenes
 
@@ -111,7 +119,7 @@ You should receive a response showing:
 * Granted scopes
 * Tool permissions mapped from scopes
 
-![ChatGPT response showing the `whoami` output with sub, scopes, and permissions.](../screenshots/live-demo-3.png)
+![ChatGPT response showing the `whoami` output with sub, scopes, and permissions.](../assets/live-demo-3.png)
 
 If this works, the entire identity + authorization chain is live:
 
@@ -151,7 +159,7 @@ These are minimal demo tools. In production, you'd replace these with tools that
 * **No tools listed** → Required scopes missing from the access token
 * **Connection timeout** → Demo server may be under heavy load or rate-limited
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed fixes.
+See [troubleshooting.md](troubleshooting.md) for detailed fixes.
 
 ## What's different from production?
 
@@ -173,15 +181,15 @@ The **authentication and authorization patterns are identical** — only the ide
 
 If this demo makes sense and you want to build your own:
 
-* Deploy your own instance → [DEPLOY_YOUR_OWN.md](DEPLOY_YOUR_OWN.md)
-* Set up Auth0 → [AUTH0_SETUP.md](AUTH0_SETUP.md)
-* Use another IdP → [OTHER_IDPS.md](OTHER_IDPS.md)
+* Deploy your own instance → [deploy-your-own.md](deploy-your-own.md)
+* Set up Auth0 → [auth0-setup-guide.md](auth0-setup-guide.md)
+* Use another IdP → [other-idps.md](other-idps.md)
 
 ### Option 2: Understand the architecture
 
-* Read the main [README.md](README.md) for the three-party problem explanation
-* Review the [backend integration pattern](docs/backend-integration-pattern.md)
-* Check out the [repo structure](README.md#repo-layout)
+* Read the main [README.md](../README.md) for the three-party problem explanation
+* Review the [backend integration pattern](backend-integration-pattern.md)
+* Check out the [repo structure](../README.md#repo-layout)
 
 ### Option 3: Build custom tools
 
@@ -193,12 +201,14 @@ If this demo makes sense and you want to build your own:
 
 * **Can't access ChatGPT MCP features?** → Check with your workspace admin or OpenAI support
 * **Demo server not responding?** → The demo may be experiencing high traffic or maintenance
-* **Want to understand the code?** → See the main [README.md](README.md) and repo documentation
-* **Ready to deploy your own?** → See [DEPLOY_YOUR_OWN.md](DEPLOY_YOUR_OWN.md)
+* **Want to understand the code?** → See the main [README.md](../README.md) and repo documentation
+* **Ready to deploy your own?** → See [deploy-your-own.md](deploy-your-own.md)
 
 ## Contact
 
 This demo exists to remove friction — the real value is in adapting the pattern to your own tools and users.
 
-**Built by [reducibl applied AI studio](https://reducibl.com)**  
-**Powered by [GatewayStack](https://github.com/gatewaystack)**
+Powered by **[GatewayStack](https://github.com/gatewaystack)**.
+Built by **[reducibl applied AI studio](https://reducibl.com)**  
+
+Need help implementing your organization's tools in ChatGPT or Claude?  We offer [implementation services](consulting.md)
