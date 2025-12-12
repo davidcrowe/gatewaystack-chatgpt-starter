@@ -7,7 +7,7 @@
 
 Give your users secure access to *their* data from inside of ChatGPT
 
-> **[Test it yourself in ChatGPT](./docs/live_demo.md)** in 1 minute with no code
+> **[Test it yourself in ChatGPT](./docs/live-demo.md)** in 1 minute with no code
 
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 
@@ -17,10 +17,11 @@ Modern AI apps involve three actors — the **user**, the **LLM**, and **your ba
 
 Both the LLM and your backend require **cryptographic proof of user identity** tied to every AI request... but AI platforms authenticate users on their side while your backend has no verified identity to enforce policies, filter data, or log actions. This is the [three-party problem](https://github.com/davidcrowe/GatewayStack/blob/main/docs/three-party-problem.md).
 
-> *Example*: An employee asks ChatGPT "show me my Q4 sales data"  
-> → How does your backend know which employee's data to return
+> **Example**: An employee asks ChatGPT "show me *my* Q4 sales data"  
+>  
+> → How does your backend know *which employee's* data to return?
 
-This repo implements a solution to the three-party problem. This starter code builds **MCP servers** to make your tools and apps available inside of ChatGPT with **real user-scoped access**.
+This repo implements a solution to the three-party problem. This starter code builds MCP servers to **make your tools and apps available inside of ChatGPT with real user-scoped access**.
 
 **User → ChatGPT (LLM) → Your MCP Server → Your Backend**
 
@@ -62,7 +63,7 @@ Typical use cases:
 If you only need a shared API-key tool, this is probably more than you need.
 If you don't need user-scoped data access for your resource or tool, this is more than you need.
 
-If you need **real identity and authorization**, this is the right pattern.
+If you need **real identity and authorization** e.g. for secure user-scoped data access, this is the right pattern.
 If you want people to access their data from your multi-tenant database through ChatGPT, this is for you.
 
 ## What you get
@@ -205,4 +206,4 @@ This repository is the reference implementation of **[GatewayStack's](https://gi
 
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-[Need help](./docs/consulting.md)? We help teams implement this pattern correctly in weeks instead of months — including IdP integration, security review support, and internal rollout. 
+**[Need help](./docs/consulting.md)?** We help teams expose internal tools to LLMs securely in weeks instead of months including IdP integration, security review support, and internal rollout. 
