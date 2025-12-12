@@ -23,7 +23,8 @@ export function createDemoApiRouter() {
   router.use(requireJwt);
 
   // Proxyabl will call POST {FUNCTIONS_BASE}/tools/<toolName>
-  router.post("/tools/:toolName", (req: AuthedRequest, res) => {
+  router.post("/:toolName", (req: AuthedRequest, res) => {
+    req.params.toolName = req.params.toolName;
     const toolName = String(req.params.toolName || "");
 
     switch (toolName) {

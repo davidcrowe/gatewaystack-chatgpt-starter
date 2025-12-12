@@ -274,14 +274,17 @@ async function baseToolGatewayImplv3(req: Request, res: Response): Promise<void>
       ({ uid, scopes, payload } = verified);
 
       const locals: any = (res as any).locals || ((res as any).locals = {});
-      locals.gatewayContext = {
+        locals.gatewayContext = {
         identity: {
-          uid,
-          sub: payload.sub,
-          scopes,
-          tool: name,
+            sub: payload.sub,
+            scope: typeof payload.scope === "string" ? payload.scope : "",
+            permissions: Array.isArray((payload as any).permissions) ? (payload as any).permissions : [],
+            tool: name,
+            scopes,
+            uid,
         },
-      };
+        };
+
     } catch (e: any) {
       res.setHeader("WWW-Authenticate", e?.www || buildWwwAuthenticate(req));
       res.status(Number(e?.status) || 401).json({
