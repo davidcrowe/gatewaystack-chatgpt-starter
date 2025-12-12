@@ -49,7 +49,7 @@ If you need **real identity and authorization**, this is the right pattern.
 
 ### OAuth Flow Diagram
 
-![OAuth Flow Diagram](./docs/oauth-flow-diagram.svg)
+![OAuth Flow Diagram](https://raw.githubusercontent.com/davidcrowe/gatewaystack-chatgpt-starter/main/docs/oauth-flow-diagram.svg)
 
 When ChatGPT calls your MCP server:
 
