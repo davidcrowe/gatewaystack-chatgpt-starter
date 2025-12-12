@@ -25,7 +25,7 @@ This repo handles:
 
 > **Live Demo** → [live-demo.md](docs/live_demo.md)
 
-https://github.com/davidcrowe/gatewaystack-chatgpt-starter/raw/main/assets/using-the-whoami-tool.mp4
+<video src="https://github.com/user-attachments/assets/aa14fce5-442d-4fec-9a76-33d20e5b2ae0" controls width="100%"></video>
 
 Connect ChatGPT directly to a **live deployed demo** of this MCP server to see OAuth + user identity working end-to-end.
 

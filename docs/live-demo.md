@@ -2,7 +2,7 @@
 
 **Spin up OAuth-protected ChatGPT tools in 2 minutes.**
 
-https://github.com/davidcrowe/gatewaystack-chatgpt-starter/raw/main/assets/using-the-whoami-tool.mp4
+<video src="https://github.com/user-attachments/assets/aa14fce5-442d-4fec-9a76-33d20e5b2ae0" controls width="100%"></video>
 
 This guide shows how to connect ChatGPT to a live, running MCP server built from this repo — with OAuth login and real user identity, end to end.
 
@@ -53,7 +53,7 @@ This deployment exposes:
 
 ## Add the MCP server to ChatGPT
 
-https://github.com/davidcrowe/gatewaystack-chatgpt-starter/raw/main/assets/connecting-the-mcp-server.mp4
+<video src="https://github.com/user-attachments/assets/35c4b40e-a213-4a0b-a6c8-c31fdb978fef" controls width="100%"></video>
 
 ### Step 1: Open the MCP connectors UI
 
