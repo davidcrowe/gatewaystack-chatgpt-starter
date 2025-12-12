@@ -43,7 +43,7 @@ export async function wellKnownOauthProtectedResourcev2(
 
   const payload: any = {
     // Tell ChatGPT this server supports OAuth Bearer
-    authorization_servers: [baseUrl],
+    authorization_servers: [OAUTH_ISSUER],
     scopes_supported,
     bearer_methods_supported: ["header"],
   };

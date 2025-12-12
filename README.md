@@ -3,9 +3,14 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 
-A **5-minute starter** for building OAuth-protected **MCP tool servers** that work in ChatGPT — with **real user-scoped access**.
+Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates data leakage, policy bypass, and audit gaps.
 
-This repo is the “front door” for the three-party system:
+- Users want AI to access *their* data (ChatGPT reading *my* calendar). 
+- Enterprises want to control *who* can use AI models (only doctors can use medical models, only directors can send sensitive prompts). 
+
+Both the LLM and your backend require **cryptographic proof of user identity** tied to every AI request... but AI platforms authenticate users on their side while your backend has no verified identity to enforce policies, filter data, or log actions. This is the [three-party problem](https://raw.githubusercontent.com/davidcrowe/GatewayStack/main/docs/three-party-problem.md).
+
+This repo implements a solution to the three-party problem to help build OAuth-protected **MCP tool servers** that work in ChatGPT with **real user-scoped access**.
 
 **User → ChatGPT (LLM) → Your MCP Server → (optional) Your Backend**
 
@@ -13,9 +18,7 @@ It handles:
 - OAuth discovery (so ChatGPT prompts login when needed)
 - JWT verification + per-tool scope enforcement
 - Mapping the OAuth subject → your internal user id (`uid`)
-- Forwarding the **same OAuth access token** downstream (Pattern 1 / end-to-end OAuth)
-
----
+- Forwarding the **same OAuth access token** downstream (end-to-end OAuth)
 
 ## Who this is for
 
@@ -30,8 +33,6 @@ Typical use cases:
 If you only need a shared API-key tool, this is probably more than you need.
 If you need **real identity and authorization**, this is the right pattern.
 
----
-
 ## What you get
 
 ✅ MCP JSON-RPC endpoints (`initialize`, `tools/list`, `tools/call`) at `POST /mcp`  
@@ -40,8 +41,6 @@ If you need **real identity and authorization**, this is the right pattern.
 ✅ Per-tool scope enforcement  
 ✅ Tool execution proxy via `@gatewaystack/proxyabl` (optional)  
 ✅ Structured request logging via `@gatewaystack/explicabl`
-
----
 
 ## How it works
 
@@ -62,12 +61,10 @@ When ChatGPT calls your MCP server:
 - **Hello World tools** can run locally (pure functions)
 - OR you can forward to a backend using Proxyabl (and the backend verifies the same JWT)
 
-**Pattern 1 (recommended for starters): OAuth token all the way through**
+**OAuth token all the way through**
 - Gateway verifies the JWT
 - Gateway forwards the same `Authorization: Bearer …` token to your backend
 - Backend verifies JWT again and uses `sub` (or mapped `uid`) for user-scoped access
-
----
 
 ## Authentication & identity providers
 
@@ -86,8 +83,6 @@ The gateway enforces:
 
 You keep full control over identity mapping and authorization logic.
 
----
-
 ## Endpoints
 
 ### MCP
@@ -100,8 +95,6 @@ You keep full control over identity mapping and authorization logic.
 ### Debug
 - `GET /` (health)
 - `GET /debug-token` (verifies the bearer token and shows `sub/aud/scope`)
-
----
 
 ## Quick Start (3 steps)
 ```bash
@@ -143,8 +136,6 @@ This repo supports multiple deployment styles:
 - How to confirm your revision is live
 - Common deployment pitfalls
 
----
-
 ## Demo tools (Hello World)
 This starter ships with two tools:
 
@@ -154,8 +145,6 @@ This starter ships with two tools:
 Tool definitions live in:
 
 - `src/tools/tools.ts`
-
----
 
 ## Customize for your app
 You usually only need to change **three things**:
@@ -178,14 +167,11 @@ If you want a real backend:
 - forward the OAuth token downstream
 - verify JWT in your backend and use sub/uid to scope data
 
----
-
 ## Common issues
 - **401 + invalid_token**: issuer/audience mismatch, or JWKS not reachable
 - **ACCESS_TOKEN_IS_ENCRYPTED_JWE**: your auth provider is returning JWE; you need a JWS access token
 - **tools/list keeps prompting OAuth**: ChatGPT isn't seeing a valid `WWW-Authenticate` header (check `/.well-known/oauth-protected-resource` + your `buildWwwAuthenticate()`)
 
----
 
 ## Repo layout
 - `src/gateway/toolGateway.ts` → main HTTP handler (MCP + well-known + REST tools)
@@ -203,10 +189,9 @@ If you want a real backend:
 - **Backend integration pattern** → [docs/backend-integration-pattern.md](./docs/backend-integration-pattern.md)
 - **Env config guide** → [docs/env-config-guide.md](./docs/env-config-guide.md)
 
----
-
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
-and powered by **[GatewayStack](https://github.com/gatewaystack)**.
+
+Powered by **[GatewayStack](https://github.com/gatewaystack)**.
 
 This repo is intended to be **forked and adapted**.
 It encodes a production-tested pattern for OAuth-protected MCP tools,
