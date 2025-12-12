@@ -22,11 +22,10 @@ This repo handles:
 - Forwarding the **same OAuth access token** downstream (end-to-end OAuth)
 
 ## Try it live (no code required)
-<p align="center">
-  <img src="../assets/using-the-whoami-tool.gif" alt="OAuth whoami demo" width="720" />
-</p>
 
-> **Live Demo** → [live-demo.md](../docs/live_demo.md)
+> **Live Demo** → [live-demo.md](docs/live_demo.md)
+
+https://github.com/davidcrowe/gatewaystack-chatgpt-starter/raw/main/docs/assets/using-the-whoami-tool.mp4
 
 Connect ChatGPT directly to a **live deployed demo** of this MCP server to see OAuth + user identity working end-to-end.
 
@@ -95,8 +94,8 @@ This starter is **IdP-agnostic**. It works with any OAuth 2.0 / OIDC provider
 that can issue **JWT access tokens (JWS)**.
 
 Guides included:
-- **Auth0** → [auth0-setup-guide.md](../docs/auth0-setup-guide.md)
-- **Other IdPs (Okta, Azure AD, Google, etc.)** → [other-idps.md](../docs/other-idps.md)
+- **Auth0** → [auth0-setup-guide.md](docs/auth0-setup-guide.md)
+- **Other IdPs (Okta, Azure AD, Google, etc.)** → [other-idps.md](docs/other-idps.md)
 
 The gateway enforces:
 - issuer
@@ -125,7 +124,7 @@ This repo supports multiple deployment styles:
 - **Cloud Run via Cloud Build (CI/CD from GitHub)** ← recommended
 - Any Node-compatible container runtime
 
-See **[deploy-your-own.md](../docs/deploy-your-own.md)** for:
+See **[deploy-your-own.md](docs/deploy-your-own.md)** for:
 - CI/CD setup
 - Cloud Run configuration
 - How to confirm your revision is live
