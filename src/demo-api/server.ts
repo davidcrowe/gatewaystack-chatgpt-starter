@@ -8,6 +8,16 @@ export function createDemoApiRouter() {
 
   router.use(express.json({ limit: "1mb" }));
 
+  router.use((req, _res, next) => {
+    console.log("[runtime:req]", {
+        rev: process.env.K_REVISION,
+        sha: process.env.GIT_SHA,
+        path: req.path,
+        method: req.method,
+    });
+    next();
+});
+
   // basic request logging
   router.use((req, _res, next) => {
     const requestId = req.header("x-request-id") || randomUUID();

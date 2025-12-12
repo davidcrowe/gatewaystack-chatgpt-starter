@@ -1,0 +1,11 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - "-t"
+      - "gcr.io/$PROJECT_ID/gatewaystack-chatgpt-starter:$COMMIT_SHA"
+      - "--build-arg"
+      - "GIT_SHA=$COMMIT_SHA"
+      - "."
+images:
+  - "gcr.io/$PROJECT_ID/gatewaystack-chatgpt-starter:$COMMIT_SHA"
