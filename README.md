@@ -14,6 +14,21 @@ It handles:
 
 ---
 
+## Who this is for
+
+This starter is designed for teams building **ChatGPT tools that act on behalf of real users**.
+
+Typical use cases:
+- Internal tools for employees via **ChatGPT Enterprise**
+- AI agents that need **user-scoped access** to company data
+- Platforms that require **SSO, auditing, and per-tool permissions**
+- Teams that want a **reference OAuth + MCP implementation** (not a toy plugin)
+
+If you only need a shared API-key tool, this is probably more than you need.
+If you need **real identity and authorization**, this is the right pattern.
+
+---
+
 ## What you get
 
 ✅ MCP JSON-RPC endpoints (`initialize`, `tools/list`, `tools/call`) at `POST /mcp`  
@@ -26,6 +41,8 @@ It handles:
 ---
 
 ## How it works
+
+> MCP (Model Context Protocol) is the current mechanism ChatGPT uses to connect to external tools with structured inputs, outputs, and authentication.
 
 When ChatGPT calls your MCP server:
 
@@ -45,6 +62,25 @@ When ChatGPT calls your MCP server:
 
 ---
 
+## Authentication & identity providers
+
+This starter is **IdP-agnostic**. It works with any OAuth 2.0 / OIDC provider
+that can issue **JWT access tokens (JWS)**.
+
+Guides included:
+- **Auth0** → [AUTH0_SETUP.md](./AUTH0_SETUP.md)
+- **Other IdPs (Okta, Azure AD, Google, etc.)** → [OTHER_IDPS.md](./OTHER_IDPS.md)
+
+The gateway enforces:
+- issuer
+- audience
+- JWKS signature verification
+- per-tool scopes
+
+You keep full control over identity mapping and authorization logic.
+
+---
+
 ## Endpoints
 
 ### MCP
@@ -60,31 +96,35 @@ When ChatGPT calls your MCP server:
 
 ---
 
-## Quickstart (local)
+## Try it live (no code required)
 
-### 1) Install + configure
+You can connect ChatGPT directly to a **live deployed demo** of this MCP server
+to see OAuth + user identity working end-to-end.
 
-```bash
-npm i
-cp .env.example .env
-# fill in OAUTH_ISSUER / OAUTH_AUDIENCE (and optionally scopes)
-npm run dev
-```
+The demo uses the same code and deployment pattern you would use in production.
 
-Server defaults to: `http://localhost:3000`
+👉 See **[LIVE_DEMO.md](./LIVE_DEMO.md)**
 
-### 2) Sanity check
-```bash
-curl -s http://localhost:3000/ | jq
-curl -s http://localhost:3000/.well-known/oauth-protected-resource | jq
-curl -s http://localhost:3000/.well-known/openid-configuration | jq
-```
+What you’ll see:
+- ChatGPT prompting for OAuth login
+- Tools becoming available after login
+- `whoami` returning your real user identity, scopes, and permissions
 
-### 3) Connect it to ChatGPT as an MCP server
-- Point ChatGPT at your MCP base URL (local via a tunnel, or deploy it)
-- Attempt a tool call
-- ChatGPT should prompt OAuth login automatically
-- After login, `tools/list` and `tools/call` succeed
+This is the fastest way to understand how the system works.
+
+## Deployment options
+
+This repo supports multiple deployment styles:
+
+- **Local development** (Express server)
+- **Cloud Run via Cloud Build (CI/CD from GitHub)** ← recommended
+- Any Node-compatible container runtime
+
+👉 See **[DEPLOY_YOUR_OWN.md](./DEPLOY_YOUR_OWN.md)** for:
+- CI/CD setup
+- Cloud Run configuration
+- How to confirm your revision is live
+- Common deployment pitfalls
 
 ---
 
@@ -135,3 +175,24 @@ If you want a real backend:
 - `src/handlers/*` → auth helpers, MCP handler, well-known handlers, misc helpers
 - `src/tools/tools.ts` → tool pack (scopes + descriptors + output shaping)
 - `src/server/expressServer.ts` → local dev server
+
+## Documentation
+
+- **Live demo** → [LIVE_DEMO.md](./LIVE_DEMO.md)
+- **Deploy your own instance** → [DEPLOY_YOUR_OWN.md](./DEPLOY_YOUR_OWN.md)
+- **Auth0 setup** → [AUTH0_SETUP.md](./AUTH0_SETUP.md)
+- **Other identity providers** → [OTHER_IDPS.md](./OTHER_IDPS.md)
+- **Troubleshooting** → [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+
+---
+
+Built by **[reducibl applied AI studio](https://reducibl.com)**  
+and powered by **[GatewayStack](https://github.com/gatewaystack)**.
+
+This repo is intended to be **forked and adapted**.
+It encodes a production-tested pattern for OAuth-protected MCP tools,
+so you don’t have to rediscover the hard parts yourself.
+
+If you’re building serious AI systems that need identity, authorization,
+and auditability, this is the foundation we use ourselves.
+
