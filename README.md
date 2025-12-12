@@ -7,7 +7,7 @@
 
 Give your users secure access to *their* data from inside of ChatGPT
 
-> **Test it yourself in ChatGPT** with no code → [live-demo.md](./docs/live_demo.md)
+> **[Test it yourself in ChatGPT](./docs/live_demo.md)** in 1 minute with no code
 
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 
