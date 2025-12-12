@@ -1,3 +1,5 @@
+// src/demo-api/client.ts
+
 export type DemoApiClientOptions = {
   baseUrl?: string; // default: http://localhost:3000/demo
 };
