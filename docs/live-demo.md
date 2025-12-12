@@ -81,7 +81,10 @@ This deployment exposes:
 > ✅ **No client secret required.**
 >
 > This demo uses OAuth discovery + Dynamic Client Registration (DCR), so ChatGPT registers its own OAuth client and completes login without you copy/pasting credentials.
-
+>
+> ChatGPT acts as a public OAuth client using PKCE and Dynamic Client Registration.
+> 
+> This mirrors how production MCP integrations are expected to work — per-client registration, no shared secrets.
    
 4. Check the "I understand and want to continue" box
 5. Click **Create**
@@ -102,16 +105,16 @@ Once saved, ChatGPT immediately tests the connection:
 6. You authenticate with the demo IdP
 7. ChatGPT retries the request with a Bearer access token
 
-
 This is the same OAuth discovery and token flow used in production MCP integrations.
 
 ---
 
 ## Verify it works
 
-Once authenticated, try calling the demo tool in ChatGPT:
+Once authenticated, try calling the demo tool in ChatGPT. Send ChatGPT a message like:
+
 ```
-whoami
+call gatewaystack and call whoami
 ```
 
 You should receive a response showing:
