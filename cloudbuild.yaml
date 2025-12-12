@@ -1,3 +1,6 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+  
 steps:
   # Build image from Dockerfile (and inject commit SHA)
   - name: gcr.io/cloud-builders/docker
