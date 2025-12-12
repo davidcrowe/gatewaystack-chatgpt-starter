@@ -17,7 +17,7 @@ Modern AI apps involve three actors — the **user**, the **LLM**, and **your ba
 
 Both the LLM and your backend require **cryptographic proof of user identity** tied to every AI request... but AI platforms authenticate users on their side while your backend has no verified identity to enforce policies, filter data, or log actions. This is the [three-party problem](https://github.com/davidcrowe/GatewayStack/blob/main/docs/three-party-problem.md).
 
-> *Example*: An employee asks ChatGPT "show me my Q4 sales data" 
+> *Example*: An employee asks ChatGPT "show me my Q4 sales data"  
 > → How does your backend know which employee's data to return
 
 This repo implements a solution to the three-party problem. This starter code builds **MCP servers** to make your tools and apps available inside of ChatGPT with **real user-scoped access**.
