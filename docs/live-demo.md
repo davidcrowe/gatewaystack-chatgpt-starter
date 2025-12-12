@@ -1,6 +1,6 @@
 # Live Demo: Use This MCP Server Directly From ChatGPT (No Code Required)
 
-**Experience OAuth-protected ChatGPT tools in under 2 minutes.**
+**Spin up OAuth-protected ChatGPT tools in 2 minutes.**
 
 This guide shows how to connect ChatGPT to a live, running MCP server built from this repo — with OAuth login and real user identity, end to end.
 
@@ -8,9 +8,7 @@ The demo deployment runs this exact codebase on Cloud Run via Cloud Build CI/CD.
 
 This is ideal for demos, evaluations, internal pilots, and understanding how ChatGPT MCP + OAuth actually works in practice.
 
-**[Jump to setup instructions](#add-the-mcp-server-to-chatgpt)** — Ready in 2 minutes
-
----
+**[Jump to setup instructions](#add-the-mcp-server-to-chatgpt)**
 
 ## About this demo
 
@@ -22,8 +20,6 @@ This is a public demo deployment of `gatewaystack-chatgpt-starter`.
 * Access may be rate-limited, reset, or disabled at any time
 
 The goal is to demonstrate the exact ChatGPT MCP + OAuth flow you would deploy in your own environment — not a toy or mock.
-
----
 
 ## What you need
 
@@ -38,8 +34,6 @@ You do **not** need:
 * A local development environment
 * A backend service
 * Your own OAuth provider
-
----
 
 ## MCP base URL
 
@@ -66,8 +60,6 @@ This deployment exposes:
 
 ![ChatGPT settings page showing where MCP servers / connectors are managed.](../screenshots/live-demo-1.png)
 
----
-
 ### Step 2: Add a new MCP server
 
 1. Navigate to **Settings → Apps & Connectors** (exact label may vary)
@@ -91,8 +83,6 @@ This deployment exposes:
 
 ![MCP server configuration form with the MCP URL filled in.](../screenshots/live-demo-2.png)
 
----
-
 ## What happens behind the scenes
 
 Once saved, ChatGPT immediately tests the connection:
@@ -107,14 +97,12 @@ Once saved, ChatGPT immediately tests the connection:
 
 This is the same OAuth discovery and token flow used in production MCP integrations.
 
----
-
 ## Verify it works
 
 Once authenticated, try calling the demo tool in ChatGPT. Send ChatGPT a message like:
 
 ```
-call gatewaystack and call whoami
+open the gatewaystack tool and call whoami
 ```
 
 You should receive a response showing:
@@ -128,8 +116,6 @@ You should receive a response showing:
 If this works, the entire identity + authorization chain is live:
 
 **User → ChatGPT → MCP server → tool execution**
-
----
 
 ## What this demo proves
 
@@ -148,8 +134,6 @@ This is the same pattern you would use for:
 * User-scoped automation
 * Auditable AI actions
 
----
-
 ## Available demo tools
 
 **`whoami`**  
@@ -160,8 +144,6 @@ Echoes back a message. Requires scope: `execute:tools`
 
 These are minimal demo tools. In production, you'd replace these with tools that access real user data (calendars, CRM records, internal docs, etc.).
 
----
-
 ## Common demo issues
 
 * **Repeated login prompts** → OAuth discovery endpoints misconfigured
@@ -170,8 +152,6 @@ These are minimal demo tools. In production, you'd replace these with tools that
 * **Connection timeout** → Demo server may be under heavy load or rate-limited
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed fixes.
-
----
 
 ## What's different from production?
 
@@ -186,8 +166,6 @@ This demo environment:
 | Data persistence | None (stateless) | Your database/services |
 
 The **authentication and authorization patterns are identical** — only the identity provider and backend differ.
-
----
 
 ## Next steps
 
@@ -211,8 +189,6 @@ If this demo makes sense and you want to build your own:
 * Learn about scope enforcement and output shaping
 * Fork the repo and add your own tools
 
----
-
 ## Questions or issues?
 
 * **Can't access ChatGPT MCP features?** → Check with your workspace admin or OpenAI support
@@ -220,7 +196,7 @@ If this demo makes sense and you want to build your own:
 * **Want to understand the code?** → See the main [README.md](README.md) and repo documentation
 * **Ready to deploy your own?** → See [DEPLOY_YOUR_OWN.md](DEPLOY_YOUR_OWN.md)
 
----
+## Contact
 
 This demo exists to remove friction — the real value is in adapting the pattern to your own tools and users.
 
