@@ -1,11 +1,34 @@
 steps:
+  # Build image from Dockerfile (and inject commit SHA)
   - name: gcr.io/cloud-builders/docker
     args:
       - build
       - "-t"
-      - "gcr.io/$PROJECT_ID/gatewaystack-chatgpt-starter:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/github.com/davidcrowe/gatewaystack-chatgpt-starter:$COMMIT_SHA"
       - "--build-arg"
       - "GIT_SHA=$COMMIT_SHA"
       - "."
+
+  # Push image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - "gcr.io/$PROJECT_ID/github.com/davidcrowe/gatewaystack-chatgpt-starter:$COMMIT_SHA"
+
+  # Deploy to Cloud Run (THIS is what creates a new revision)
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - gatewaystack-chatgpt-starter
+      - "--image"
+      - "gcr.io/$PROJECT_ID/github.com/davidcrowe/gatewaystack-chatgpt-starter:$COMMIT_SHA"
+      - "--region"
+      - "europe-west1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+
 images:
-  - "gcr.io/$PROJECT_ID/gatewaystack-chatgpt-starter:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/github.com/davidcrowe/gatewaystack-chatgpt-starter:$COMMIT_SHA"
