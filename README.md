@@ -35,13 +35,44 @@ Both the LLM and your backend require **cryptographic proof of user identity** t
 
 This repo implements a solution to the three-party problem. This starter code builds MCP servers to **make your tools and apps available inside of ChatGPT with real user-scoped access**.
 
-**User → ChatGPT (LLM) → Your MCP Server → Your Backend**
+```
+┌─────────┐         ┌─────────┐         ┌─────────┐
+│  USER   │────────►│   LLM   │────────►│ BACKEND │
+│ (Alice) │         │(ChatGPT)│         │(Your API)│
+└─────────┘         └─────────┘         └─────────┘
+    │                     │                    │
+    │                     │                    │
+    ▼                     ▼                    ▼
+✓ Has identity      ✓ Knows user         ❌ Lost identity
+                    ✓ Acts on behalf     ❌ Shared key only
+                                         ❌ Can't verify
+
+
+        ADD GATEWAYSTACK IN THE MIDDLE:
+
+┌─────────┐    ┌─────────┐    ┌──────────────┐    ┌─────────┐
+│  USER   │───►│   LLM   │───►│ GATEWAYSTACK │───►│ BACKEND │
+│ (Alice) │    │(ChatGPT)│    │   Verify &   │    │(Your API)│
+└─────────┘    └─────────┘    │   Transfer   │    └─────────┘
+                              │   Identity   │
+                              └──────────────┘
+                                      │
+                                      ▼
+                              ✅ Cryptographic
+                              ✅ User verified
+                              ✅ X-User-Id: alice
+```
+
+**User → LLM (ChatGPT) → GatewayStack (in your MCP Server) → Your Backend**
 
 This repo handles:
 - OAuth discovery (so ChatGPT prompts login when needed)
 - JWT verification + per-tool scope enforcement
 - Mapping the OAuth subject → your internal user id (`uid`)
 - Forwarding the **same OAuth access token** downstream (end-to-end OAuth)
+
+> **Want to understand the full architecture?** See the [GatewayStack documentation](https://github.com/davidcrowe/GatewayStack) for deployment options, advanced features, and the six-layer governance model.
+
 
 ## Try it live (no code required)
 
@@ -89,9 +120,14 @@ If you want people to securely access their data from your multi-tenant database
 
 ## Why this repo exists
 
-Most MCP examples use shared API keys. That's fine for weather APIs, but dangerous for user data.
+Most MCP examples use shared API keys. That's fine for weather APIs, but **dangerous for user data**.
 
-This repo exists to establish the minimum viable security baseline for real AI tools.
+Without user-scoped identity:
+- Alice asks ChatGPT "show my calendar" → sees Bob's calendar too 🚨
+- Anyone can use expensive/sensitive models → no cost control
+- Security audit asks "who accessed what?" → can't answer
+
+This repo exists to establish the **minimum viable security baseline** for AI tools that handle real user data.
 
 ## How it works
 > MCP (Model Context Protocol) is the current mechanism ChatGPT uses to connect to external tools with structured inputs, outputs, and authentication.
@@ -214,7 +250,7 @@ and auditability, this is the foundation we use ourselves.
 - **Backend integration pattern** → [docs/backend-integration-pattern.md](./docs/backend-integration-pattern.md)
 - **Env config guide** → [docs/env-config-guide.md](./docs/env-config-guide.md)
 
-This repository is the reference implementation of **[GatewayStack's](hhttps://github.com/davidcrowe/GatewayStack)** identity, authorization, and observability primitives for MCP servers
+This repository is the reference implementation of **[GatewayStack's](https://github.com/davidcrowe/GatewayStack)** identity, authorization, and observability primitives for MCP servers
 
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
