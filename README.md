@@ -1,13 +1,26 @@
 # gatewaystack-chatgpt-starter
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
+<p align="center">
+  <img src="./assets/banner.png" alt="GatewayStack banner" />
+</p>
 
-**Expose internal tools to LLMs — securely**  
+<p align="center">
+  <a href="https://opensource.org/licenses/Apache-2.0">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" />
+  </a>
+  <a href="https://www.typescriptlang.org/">
+    <img src="https://img.shields.io/badge/TypeScript-5.3-blue" />
+  </a>
+</p>
 
-Give your users secure access to *their* data from inside of ChatGPT
+<p align="center"><strong>Expose internal tools to LLMs — securely</strong></p>
 
-> **[Test it yourself in ChatGPT](./docs/live-demo.md)** in 1 minute with no code
+<p align="center">Give your users secure access to <em>their</em> data from inside of ChatGPT</p>
+
+<p align="center">
+  <strong><a href="./docs/live-demo.md">Test it yourself in ChatGPT</a></strong><br/>
+  <em>1 minute · no code</em>
+</p>
 
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 

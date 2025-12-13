@@ -78,7 +78,7 @@ This deployment exposes:
 
    - **Name:** `GatewayStack-ChatGPT-Starter`
    - **MCP Server URL:** `https://gatewaystack-chatgpt-starter-138953111861.europe-west1.run.app`
-   - **Authentication:** OAuth (automatic via discovery)   
+   - **Authentication:** OAuth  
 4. Check the "I understand and want to continue" box
 5. Click **Create**
 
@@ -114,7 +114,7 @@ You should receive a response showing:
 
 ![ChatGPT response showing the `whoami` output with sub, scopes, and permissions.](../assets/live-demo-3.png)
 
-This is a live demonstration of the end-to-end identity + authorization chain:
+The response demonstrates the end-to-end identity + authorization chain:
 
 **User → ChatGPT → MCP server → tool execution**
 
@@ -166,7 +166,7 @@ This demo environment:
 | Rate limits | Shared across all demo users | Dedicated capacity |
 | Data persistence | None (stateless) | Your database/services |
 
-The **authentication and authorization patterns are identical** — only the identity provider and backend differ.
+The **authentication and authorization patterns are identical** — you just plugin your identity provider and backend.
 
 ## Next steps
 
@@ -192,10 +192,10 @@ If this demo makes sense and you want to build your own:
 
 ## Questions or issues?
 
-* **Can't access ChatGPT MCP features?** → Check with your workspace admin or OpenAI support
-* **Demo server not responding?** → The demo may be experiencing high traffic or maintenance
+* **Can't access ChatGPT developer mode?** → Make sure you are using ChatGPT Enterprise or Plus
 * **Want to understand the code?** → See the main [README.md](../README.md) and repo documentation
 * **Ready to deploy your own?** → See [deploy-your-own.md](./deploy-your-own.md)
+* **Need to contact the develper?** → Email us at `reducibl@gmail.com`
 
 ## Contact
 
