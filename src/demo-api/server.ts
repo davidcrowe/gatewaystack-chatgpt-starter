@@ -2,6 +2,11 @@ import express from "express";
 import { randomUUID } from "crypto";
 import { requireJwt, type AuthedRequest } from "./jwtAuth";
 import { seedNotes, listNotes, addNote } from "./store";
+import { salesSummary } from "./crm/queries";
+
+import { userKeyFromSubject, userLabel } from "./crm/identity";
+import { ensureSeeded } from "./crm/seed";
+import { getGlobalCounts } from "./crm/db";
 
 export function createDemoApiRouter() {
   const router = express.Router();
@@ -120,6 +125,54 @@ export function createDemoApiRouter() {
         if (!text) return res.status(400).json({ ok: false, error: "missing_text" });
         const note = addNote(req.auth!.sub, text);
         return res.json({ ok: true, note });
+      }
+
+      case "crmInit": {
+        // Never store sub. Convert it to a non-reversible key.
+        const subject = String(req.auth!.sub || "");
+        const userKey = userKeyFromSubject(subject);
+
+        const seed = ensureSeeded(userKey);
+        const counts = getGlobalCounts();
+
+        return res.json({
+          ok: true,
+          welcome: {
+            user: userLabel(userKey),
+            seeded: seed.seeded,
+            createdDeals: seed.createdDeals,
+            dbUsers: counts.users,
+            dbEntries: counts.entries,
+            try: [
+              "What were my sales in Q2 2025?",
+              "Show my sales in Q4 2024",
+              "List my open deals",
+            ],
+          },
+        });
+      }
+
+
+      case "crmGetSalesSummary": {
+        const subject = String(req.auth!.sub || "");
+        const userKey = userKeyFromSubject(subject);
+
+        // Ensure the user has mock data (idempotent)
+        ensureSeeded(userKey);
+
+        const yearRaw = Number(req.body?.year);
+        const quarterRaw = Number(req.body?.quarter);
+
+        const year = Number.isFinite(yearRaw) ? yearRaw : new Date().getUTCFullYear();
+        const quarter = Number.isFinite(quarterRaw) ? quarterRaw : 1;
+
+        const summary = salesSummary(userKey, year, quarter);
+
+        return res.json({
+          ok: true,
+          user: userLabel(userKey),
+          summary,
+        });
       }
 
       default:

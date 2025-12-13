@@ -7,6 +7,9 @@ export const TOOL_SCOPES: Record<string, string[]> = {
   seedMyNotes: ["starter.notes"],
   listMyNotes: ["starter.notes"],
   addNote: ["starter.notes"],
+
+  crmInit: ["starter.crm"],
+  crmGetSalesSummary: ["starter.crm"], 
 };
 
 // Convenience: union of all required scopes (used for OAuth prompting)
@@ -66,6 +69,30 @@ export function mcpToolDescriptors() {
           text: { type: "string", description: "Note text." },
         },
         required: ["text"],
+        additionalProperties: false,
+      },
+    },
+    {
+      name: "crmInit",
+      description:
+        "Initialize a mock CRM for the current user (no PII stored). Seeds dummy deals if this user is new and returns a welcome message plus database counts and suggested commands.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+    },
+    {
+      name: "crmGetSalesSummary",
+      description:
+        "Return mock CRM sales totals for a given quarter/year for the current authenticated user. Example: {year: 2025, quarter: 2}.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          year: { type: "number", description: "e.g. 2025" },
+          quarter: { type: "number", description: "1-4" },
+        },
+        required: ["year", "quarter"],
         additionalProperties: false,
       },
     },
@@ -130,6 +157,21 @@ export function summarizeToolResult(toolName: string, payload: any): string {
     const note = p?.note;
     const text = note?.text ?? "";
     return `Added note: ${String(text).slice(0, 120)}`;
+  }
+
+  if (toolName === "crmInit") {
+    const w = p?.welcome;
+    if (!w) return "CRM initialized.";
+    return `Welcome ${w.user}. ${w.seeded ? `Created ${w.createdDeals} dummy deals for you.` : "Your demo CRM is ready."} Database: ${w.dbUsers} users, ${w.dbEntries} total entries. Try: “${(w.try?.[0] || "What were my sales in Q2 2025?")}”`;
+  }
+
+
+  if (toolName === "crmGetSalesSummary") {
+    const s = p?.summary;
+    if (!s) return "Sales summary unavailable.";
+
+    const dollars = (Number(s.revenue_cents || 0) / 100).toFixed(0);
+    return `📊 Sales in Q${s.quarter} ${s.year}: $${dollars} across ${s.deals_won} won deals.`;
   }
 
   return `Tool '${toolName}' completed.`;
