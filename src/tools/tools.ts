@@ -121,6 +121,16 @@ export function mcpToolDescriptors() {
         additionalProperties: false,
       },
     },
+    {
+    name: "crmResetMyData",
+    description:
+      "Reset and reseed the current user's mock CRM data. Useful for demos and clean replays.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
+  },
   ];
 }
 
