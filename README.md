@@ -16,7 +16,9 @@
 <p align="center">Give your users secure access to <em>their</em> data from inside of ChatGPT</p>
 
 <p align="center">
-  <strong><a href="./docs/live-demo.md">Test in ChatGPT (1 minute, no code)</a></strong><br/>
+  <strong><a href="./docs/live-demo.md">Live demo in ChatGPT</a></strong>
+  <br/>
+  <strong><a href="https://github.com/davidcrowe/gatewaystack">Architecture deep-dive</a></strong>
 </p>
 
 ## Trust and governance layer between users, LLMs, and your backend
@@ -123,7 +125,7 @@ If you want people to securely access their data from your multi-tenant database
 Most MCP examples use shared API keys. That's fine for weather APIs, but **dangerous for user data**.
 
 Without user-scoped identity:
-- Alice asks ChatGPT "show my calendar" → sees Bob's calendar too 🚨
+- Alice asks ChatGPT "show my calendar" → sees Bob's calendar too
 - Anyone can use expensive/sensitive models → no cost control
 - Security audit asks "who accessed what?" → can't answer
 
