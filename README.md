@@ -19,6 +19,8 @@
   <strong><a href="./docs/live-demo.md">Test in ChatGPT (1 minute, no code)</a></strong><br/>
 </p>
 
+## Trust and governance layer between users, LLMs, and your backend
+
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
 
 - Users want AI to access *their* data (ChatGPT reading *my* calendar). 
