@@ -6,7 +6,7 @@ import { salesSummary } from "./crm/queries";
 
 import { userKeyFromSubject, userLabel } from "./crm/identity";
 import { ensureSeeded } from "./crm/seed";
-import { getGlobalCounts } from "./crm/db";
+import { getGlobalCounts, deleteUserData } from "./crm/db";
 
 export function createDemoApiRouter() {
   const router = express.Router();
@@ -152,7 +152,6 @@ export function createDemoApiRouter() {
         });
       }
 
-
       case "crmGetSalesSummary": {
         const subject = String(req.auth!.sub || "");
         const userKey = userKeyFromSubject(subject);
@@ -172,6 +171,90 @@ export function createDemoApiRouter() {
           ok: true,
           user: userLabel(userKey),
           summary,
+        });
+      }
+
+      case "crmExplainAccess": {
+        const subject = String(req.auth!.sub || "");
+        const userKey = userKeyFromSubject(subject);
+
+        // Ensure a user has data (optional but nice: means they can try sales tools right away)
+        const seed = ensureSeeded(userKey);
+        const counts = getGlobalCounts();
+
+        const label = userLabel(userKey);
+
+        return res.json({
+          ok: true,
+          access: {
+            you_are: label,
+            can_access: [
+              "Your mock CRM deals",
+              "Your mock sales summaries (e.g. Q2 2025)",
+              "Your mock pipeline analytics (if enabled)",
+            ],
+            cannot_access: [
+              "Any other user's CRM data",
+              "Any data not derived from your OAuth identity",
+              "Any PII (we do not store email/name/sub in the CRM database)",
+            ],
+            why: [
+              "All CRM queries are scoped to your authenticated identity (OAuth JWT sub → anonymous user_key).",
+              "The CRM database stores only an HMAC-derived user_key (non-reversible) and 100% mock records.",
+              "No CRM tool accepts a user identifier input, so cross-user queries are impossible by design.",
+            ],
+            proof: {
+              seeded_now: seed.seeded,
+              created_deals: seed.createdDeals,
+              db_users: counts.users,
+              db_entries: counts.entries,
+            },
+            try_next: [
+              "crmInit",
+              "crmGetSalesSummary { year: 2025, quarter: 2 }",
+              'Try: crmAttemptCrossUserRead { targetUser: "user-abcdef" }',
+            ],
+          },
+        });
+      }
+
+      case "crmAttemptCrossUserRead": {
+        const subject = String(req.auth!.sub || "");
+        const userKey = userKeyFromSubject(subject);
+        ensureSeeded(userKey);
+
+        const requested = String(req.body?.targetUser ?? "").trim();
+        const actual = userLabel(userKey);
+
+        // We intentionally do NOT use the requested targetUser for any query.
+        return res.status(403).json({
+          ok: false,
+          error: "cross_user_access_denied",
+          requested_target: requested || null,
+          actual_scope: actual,
+          explanation:
+            "CRM tools are hard-scoped to the authenticated identity. The server ignores any requested user and only uses your OAuth identity-derived user_key.",
+          how_to_demo:
+            "Log in as a second user (incognito), note their user-xxxxxx label from crmInit, then try targeting it here.",
+        });
+      }
+
+      case "crmResetMyData": {
+        const subject = String(req.auth!.sub || "");
+        const userKey = userKeyFromSubject(subject);
+
+        deleteUserData(userKey);
+        const seed = ensureSeeded(userKey);
+        const counts = getGlobalCounts();
+
+        return res.json({
+            ok: true,
+            reset: true,
+            user: userLabel(userKey),
+            seeded: seed.seeded,
+            createdDeals: seed.createdDeals,
+            dbUsers: counts.users,
+            dbEntries: counts.entries,
         });
       }
 

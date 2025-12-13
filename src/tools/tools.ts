@@ -9,7 +9,9 @@ export const TOOL_SCOPES: Record<string, string[]> = {
   addNote: ["starter.notes"],
 
   crmInit: ["starter.crm"],
-  crmGetSalesSummary: ["starter.crm"], 
+  crmGetSalesSummary: ["starter.crm"],
+  crmExplainAccess: ["starter.crm"],
+  crmAttemptCrossUserRead: ["starter.crm"],
 };
 
 // Convenience: union of all required scopes (used for OAuth prompting)
@@ -96,6 +98,29 @@ export function mcpToolDescriptors() {
         additionalProperties: false,
       },
     },
+    {
+      name: "crmExplainAccess",
+      description:
+        "Explain what CRM data the current authenticated user can access and what they cannot. Emphasizes user-scoped isolation and that CRM stores no PII. Also returns suggested demo commands.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+      },
+    },
+    {
+      name: "crmAttemptCrossUserRead",
+      description:
+        "Demonstrate that cross-user CRM access is denied. Provide a target user label (e.g. from another login) and the tool will refuse and explain why.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          targetUser: { type: "string", description: 'User label to attempt, e.g. "user-abc123"' },
+        },
+        required: ["targetUser"],
+        additionalProperties: false,
+      },
+    },
   ];
 }
 
@@ -172,6 +197,23 @@ export function summarizeToolResult(toolName: string, payload: any): string {
 
     const dollars = (Number(s.revenue_cents || 0) / 100).toFixed(0);
     return `📊 Sales in Q${s.quarter} ${s.year}: $${dollars} across ${s.deals_won} won deals.`;
+  }
+
+  if (toolName === "crmExplainAccess") {
+    const a = p?.access;
+    if (!a) return "CRM access rules unavailable.";
+    return `🔐 You are ${a.you_are}. You can access YOUR mock CRM data (deals + sales summaries). You cannot access any other user's CRM data. Why: identity-scoped queries + no user-id inputs + CRM stores no PII. Try: crmAttemptCrossUserRead with another user's label.`;
+  }
+
+  if (toolName === "crmAttemptCrossUserRead") {
+    const requested = p?.requested_target ?? null;
+    const actual = p?.actual_scope ?? "(unknown)";
+    return `❌ Access denied. Requested ${requested || "(none)"} but your scope is ${actual}. CRM tools are hard-scoped to your authenticated identity, so cross-user reads are blocked.`;
+  }
+
+  if (toolName === "crmResetMyData") {
+    const u = p?.user ?? "your user";
+    return `🔄 Reset complete for ${u}. Reseeded ${p?.createdDeals ?? 0} dummy deals.`;
   }
 
   return `Tool '${toolName}' completed.`;

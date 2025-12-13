@@ -54,3 +54,11 @@ export function getGlobalCounts() {
   return { users, deals, entries: users + deals };
 }
 
+export function deleteUserData(userKey: string) {
+  const db = getCrmDb();
+  const tx = db.transaction(() => {
+    db.prepare(`DELETE FROM deals WHERE user_key = ?`).run(userKey);
+    db.prepare(`DELETE FROM users WHERE user_key = ?`).run(userKey);
+  });
+  tx();
+}
