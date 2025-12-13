@@ -1,5 +1,3 @@
-# gatewaystack-chatgpt-starter
-
 <p align="center">
   <img src="./assets/banner.png" alt="GatewayStack banner" />
 </p>
@@ -18,8 +16,7 @@
 <p align="center">Give your users secure access to <em>their</em> data from inside of ChatGPT</p>
 
 <p align="center">
-  <strong><a href="./docs/live-demo.md">Test it yourself in ChatGPT</a></strong><br/>
-  <em>1 minute · no code</em>
+  <strong><a href="./docs/live-demo.md">Test in ChatGPT (1 minute, no code)</a></strong><br/>
 </p>
 
 Modern AI apps involve three actors — the **user**, the **LLM**, and **your backend** — yet there is no shared identity layer binding them together. This creates user-scoped data, policy, and audit gaps.
