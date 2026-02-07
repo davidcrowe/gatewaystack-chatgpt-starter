@@ -1,5 +1,5 @@
 import { randomUUID, createHash } from "crypto";
-import { getCrmDb } from "./db";
+import { getCrmDb } from "./db.js";
 
 // Deterministic-ish RNG from user_key so the dataset is stable per user (nice for demos)
 function mulberry32(seed: number) {

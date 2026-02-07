@@ -2,11 +2,10 @@
   "name": "gatewaystack-chatgpt-starter",
   "version": "0.1.0",
   "private": true,
-  "type": "commonjs",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/server/expressServer.js",
   "scripts": {
-    "dev": "ts-node src/server/expressServer.ts",
+    "dev": "node --import tsx src/server/expressServer.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server/expressServer.js",
     "lint": "echo \"(add eslint if you want)\""
@@ -26,7 +25,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^4.17.21",
     "@types/node": "^22.10.2",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
   "engines": {

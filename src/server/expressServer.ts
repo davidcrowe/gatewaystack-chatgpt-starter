@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
-import { toolGatewayImpl } from "../gateway/toolGateway";
-import { createDemoApiRouter } from "../demo-api/server";
+import { toolGatewayImpl } from "../gateway/toolGateway.js";
+import { createDemoApiRouter } from "../demo-api/server.js";
 
 /**
  * Derive the externally-reachable base URL for this service from the incoming request.
@@ -105,10 +105,8 @@ export function createApp() {
   return app;
 }
 
-if (require.main === module) {
-  const port = Number(process.env.PORT || 3000);
-  createApp().listen(port, () => {
-    console.log(`[starter] listening on http://localhost:${port}`);
-    console.log(`[starter] demo api at     http://localhost:${port}/demo/health`);
-  });
-}
+const port = Number(process.env.PORT || 3000);
+createApp().listen(port, () => {
+  console.log(`[starter] listening on http://localhost:${port}`);
+  console.log(`[starter] demo api at     http://localhost:${port}/demo/health`);
+});

@@ -1,9 +1,9 @@
 // src/handlers/authHelpers.ts
 import type { Request } from "express";
 import { updateGatewayContext } from "@gatewaystack/request-context";
-import { REQUIRED_SCOPES, TOOL_SCOPES } from "../tools/tools";
-import { identifiablVerifier } from "../gateway/toolGateway";
-import { OAUTH_SCOPES, OAUTH_AUDIENCE } from "./oauthConfig";
+import { REQUIRED_SCOPES, TOOL_SCOPES } from "../tools/tools.js";
+import { identifiablVerifier } from "../gateway/toolGateway.js";
+import { OAUTH_SCOPES, OAUTH_AUDIENCE } from "./oauthConfig.js";
 
 // ----------------- Small helpers -----------------
 export function readAuth(req: Request) {

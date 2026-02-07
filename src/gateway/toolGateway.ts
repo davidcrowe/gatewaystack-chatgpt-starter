@@ -12,25 +12,25 @@ import {
   explicablLoggingMiddleware,
 } from "@gatewaystack/explicabl";
 
-import { looksLikeJsonRpc, handleMcp } from "../handlers/mcpHandler";
+import { looksLikeJsonRpc, handleMcp } from "../handlers/mcpHandler.js";
 import {
   verifyBearer,
   verifyBearerAndScopes,
   buildWwwAuthenticate,
-} from "../handlers/authHelpers";
-import { wellKnownOauthProtectedResourcev2 } from "../handlers/wellKnown";
+} from "../handlers/authHelpers.js";
+import { wellKnownOauthProtectedResourcev2 } from "../handlers/wellKnown.js";
 import {
   setCorsHeaders,
   toolNameFromPath,
   fetchJsonWithRetry,
-} from "../handlers/httpHelpers";
+} from "../handlers/httpHelpers.js";
 import {
   OAUTH_ISSUER,
   OAUTH_AUDIENCE,
   OAUTH_SCOPES,
   JWKS_URI_FALLBACK,
   OIDC_DISCOVERY,
-} from "../handlers/oauthConfig";
+} from "../handlers/oauthConfig.js";
 
 console.log("[toolGatewayHandler] module loaded");
 

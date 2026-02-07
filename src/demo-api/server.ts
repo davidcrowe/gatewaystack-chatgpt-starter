@@ -1,12 +1,11 @@
 import express from "express";
 import { randomUUID } from "crypto";
-import { requireJwt, type AuthedRequest } from "./jwtAuth";
-import { seedNotes, listNotes, addNote } from "./store";
-import { salesSummary } from "./crm/queries";
-
-import { userKeyFromSubject, userLabel } from "./crm/identity";
-import { ensureSeeded } from "./crm/seed";
-import { getGlobalCounts, deleteUserData } from "./crm/db";
+import { requireJwt, type AuthedRequest } from "./jwtAuth.js";
+import { seedNotes, listNotes, addNote } from "./store.js";
+import { salesSummary } from "./crm/queries.js";
+import { userKeyFromSubject, userLabel } from "./crm/identity.js";
+import { ensureSeeded } from "./crm/seed.js";
+import { getGlobalCounts, deleteUserData } from "./crm/db.js";
 
 export function createDemoApiRouter() {
   const router = express.Router();
