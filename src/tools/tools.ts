@@ -12,6 +12,7 @@ export const TOOL_SCOPES: Record<string, string[]> = {
   crmGetSalesSummary: ["starter.crm"],
   crmExplainAccess: ["starter.crm"],
   crmAttemptCrossUserRead: ["starter.crm"],
+  crmResetMyData: ["starter.crm"],
 };
 
 // Convenience: union of all required scopes (used for OAuth prompting)

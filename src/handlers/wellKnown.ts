@@ -1,12 +1,12 @@
 // functions/src/handlers/wellKnown.ts
 import type { Request, Response } from "express";
-import { REQUIRED_SCOPES } from "../tools/tools";
+import { REQUIRED_SCOPES } from "../tools/tools.js";
 import {
   OAUTH_ISSUER,
   OAUTH_AUDIENCE,
   OAUTH_SCOPES,
   JWKS_URI_FALLBACK,
-} from "./oauthConfig";
+} from "./oauthConfig.js";
 
 export async function wellKnownOauthProtectedResourcev2(
   req: Request,

@@ -1,4 +1,4 @@
-import { getCrmDb } from "./db";
+import { getCrmDb } from "./db.js";
 
 function quarterRange(year: number, quarter: number) {
   const q = Math.min(4, Math.max(1, quarter));

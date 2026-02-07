@@ -7,16 +7,16 @@ import {
   formatStructuredContent,
   formatStructuredForTool,
   mcpToolDescriptors,
-} from "../tools/tools";
+} from "../tools/tools.js";
 import {
   verifyBearer,
   buildWwwAuthenticate,
   readAuth,
   verifyBearerAndScopes,
   logAuthShape,
-} from "./authHelpers";
-import { getProxyablClientForRequest } from "../gateway/toolGateway";
-import { setCorsHeaders } from "./httpHelpers";
+} from "./authHelpers.js";
+import { getProxyablClientForRequest } from "../gateway/toolGateway.js";
+import { setCorsHeaders } from "./httpHelpers.js";
 
 type JsonRpcReq = {
   jsonrpc: "2.0";

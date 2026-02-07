@@ -1,7 +1,7 @@
-// apps/gatewaystack-chatgpt-starter/src/server/app.ts
 import express from "express";
-import { toolGatewayImpl } from "../gateway/toolGateway";
-import { createDemoApiRouter } from "../demo-api/server";
+import rateLimit from "express-rate-limit";
+import { toolGatewayImpl } from "../gateway/toolGateway.js";
+import { createDemoApiRouter } from "../demo-api/server.js";
 
 /**
  * Derive the externally-reachable base URL for this service from the incoming request.
@@ -78,6 +78,16 @@ export function createApp() {
     })
     );
 
+  // Rate limiting — 100 requests per minute per IP
+  app.use(
+    rateLimit({
+      windowMs: 60_000,
+      max: 100,
+      standardHeaders: "draft-7",
+      legacyHeaders: false,
+    })
+  );
+
   // Demo backend mounted on same server (Cloud Run friendly)
   app.use("/demo", createDemoApiRouter());
 
@@ -95,10 +105,8 @@ export function createApp() {
   return app;
 }
 
-if (require.main === module) {
-  const port = Number(process.env.PORT || 3000);
-  createApp().listen(port, () => {
-    console.log(`[starter] listening on http://localhost:${port}`);
-    console.log(`[starter] demo api at     http://localhost:${port}/demo/health`);
-  });
-}
+const port = Number(process.env.PORT || 3000);
+createApp().listen(port, () => {
+  console.log(`[starter] listening on http://localhost:${port}`);
+  console.log(`[starter] demo api at     http://localhost:${port}/demo/health`);
+});
