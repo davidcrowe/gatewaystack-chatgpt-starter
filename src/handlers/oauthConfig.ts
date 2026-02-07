@@ -1,9 +1,10 @@
-// functions/src/handlers/oauthConfig.ts
-
 // Canonical place to read OAuth-related env for the gateway / well-known endpoints
 
-export const OAUTH_ISSUER = (process.env.OAUTH_ISSUER ??
-  "https://dev-e2r87v477lvku60t.us.auth0.com/").replace(/\/+$/, "");
+if (!process.env.OAUTH_ISSUER) {
+  throw new Error("OAUTH_ISSUER env var is required (e.g. https://your-tenant.us.auth0.com)");
+}
+
+export const OAUTH_ISSUER = process.env.OAUTH_ISSUER.replace(/\/+$/, "");
 
 export const OAUTH_AUDIENCE = process.env.OAUTH_AUDIENCE || undefined; // Auth0 API Identifier when set
 export const OAUTH_SCOPES = (process.env.OAUTH_SCOPES ?? "openid email profile").trim();
