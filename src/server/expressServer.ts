@@ -1,5 +1,5 @@
-// apps/gatewaystack-chatgpt-starter/src/server/app.ts
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { toolGatewayImpl } from "../gateway/toolGateway";
 import { createDemoApiRouter } from "../demo-api/server";
 
@@ -77,6 +77,16 @@ export function createApp() {
         limit: "2mb",
     })
     );
+
+  // Rate limiting — 100 requests per minute per IP
+  app.use(
+    rateLimit({
+      windowMs: 60_000,
+      max: 100,
+      standardHeaders: "draft-7",
+      legacyHeaders: false,
+    })
+  );
 
   // Demo backend mounted on same server (Cloud Run friendly)
   app.use("/demo", createDemoApiRouter());
