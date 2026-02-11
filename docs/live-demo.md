@@ -204,4 +204,4 @@ This demo exists to remove friction — the real value is in adapting the patter
 Powered by **[GatewayStack](https://github.com/gatewaystack)**.
 Built by **[reducibl applied AI studio](https://reducibl.com)**  
 
-Need help implementing your organization's tools in ChatGPT or Claude?  Check out our [implementation services](./consulting.md)
+Need help implementing your organization's tools in ChatGPT, Claude, or other LLM platforms? Check out our [implementation services](./consulting.md).

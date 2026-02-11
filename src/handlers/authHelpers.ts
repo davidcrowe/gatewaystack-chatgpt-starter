@@ -5,6 +5,8 @@ import { REQUIRED_SCOPES, TOOL_SCOPES } from "../tools/tools.js";
 import { identifiablVerifier } from "../gateway/toolGateway.js";
 import { OAUTH_SCOPES, OAUTH_AUDIENCE } from "./oauthConfig.js";
 
+const DEBUG = !!process.env.DEBUG;
+
 // ----------------- Small helpers -----------------
 export function readAuth(req: Request) {
   const auth = req.header("authorization") || "";
@@ -15,6 +17,7 @@ export function readAuth(req: Request) {
 }
 
 export function logAuthShape(prefix: string, req: Request) {
+  if (!DEBUG) return;
   const { hasAuth, tokenShape, len } = readAuth(req);
   console.log(
     `[auth:${prefix}] hasAuth=%s tokenShape=%s len=%d path=%s method=%s`,
@@ -27,6 +30,7 @@ export function logAuthShape(prefix: string, req: Request) {
 }
 
 export function logTokenScopes(prefix: string, payload: any) {
+  if (!DEBUG) return;
   const scopeStr = typeof payload.scope === "string" ? payload.scope : "";
   const permissions = Array.isArray((payload as any).permissions)
     ? (payload as any).permissions
@@ -104,7 +108,7 @@ export async function verifyBearer(req: Request) {
 
   const segments = accessToken.split(".");
   const header = segments[0] ? b64urlDecodeToJson(segments[0]) : undefined;
-  console.log(
+  if (DEBUG) console.log(
     "[auth:token] segments=%d header.alg=%s header.typ=%s",
     segments.length,
     header?.alg,
@@ -137,7 +141,7 @@ export async function verifyBearer(req: Request) {
 
   const { identity, payload } = result;
 
-  console.log("[auth:postVerify]", {
+  if (DEBUG) console.log("[auth:postVerify]", {
     sub: identity.sub,
     issuer: identity.issuer,
     tenantId: identity.tenantId,

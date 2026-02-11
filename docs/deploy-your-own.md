@@ -1,6 +1,6 @@
 # Deploy Your Own MCP Server
 
-This guide walks through deploying your **own copy** of the gatewaystack ChatGPT MCP server.
+This guide walks through deploying your **own copy** of the GatewayStack MCP server.
 
 ---
 
@@ -63,7 +63,7 @@ GET /
 GET /.well-known/oauth-protected-resource
 ```
 
-If these return JSON, ChatGPT can discover your server.
+If these return JSON, MCP clients can discover your server.
 
 ---
 
@@ -71,7 +71,7 @@ If these return JSON, ChatGPT can discover your server.
 
 ```bash
 docker build -t mcp-server .
-docker run -p 8080:8080 \
+docker run -p 3000:3000 \
   -e OAUTH_ISSUER=... \
   -e OAUTH_AUDIENCE=... \
   mcp-server

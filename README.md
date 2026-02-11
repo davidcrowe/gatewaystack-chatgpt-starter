@@ -13,7 +13,7 @@
 
 <p align="center"><strong>Build your own MCP server with real user identity</strong></p>
 
-<p align="center">User-scoped AI tools for ChatGPT, Claude, and any MCP client — powered by <a href="https://gatewaystack.com">GatewayStack</a></p>
+<p align="center">A 5-minute starter for building OAuth-protected MCP tool servers with real user-scoped access.<br/>Works with ChatGPT, Claude, and any MCP-compatible client — powered by <a href="https://gatewaystack.com">GatewayStack</a>.</p>
 
 ## What this is
 
@@ -22,15 +22,36 @@ A production-ready starter for building MCP servers where **every AI request is 
 If your tools need to know _which user_ is calling — not just _that someone_ is calling — this is the pattern.
 
 ```
-User (Alice) → AI Client (ChatGPT) → Your MCP Server (this repo) → Your Backend
-                                          │
-                                    ┌─────┴─────┐
-                                    │ verify JWT │
-                                    │ check scope│
-                                    │ map sub→uid│
-                                    │ forward tok│
-                                    └────────────┘
+User (Alice) → LLM (ChatGPT, Claude, etc.) → Your MCP Server (this repo) → Your Backend
+                                                      │
+                                                ┌─────┴─────┐
+                                                │ verify JWT │
+                                                │ check scope│
+                                                │ map sub→uid│
+                                                │ forward tok│
+                                                └────────────┘
 ```
+
+**Example:** A user asks their AI assistant: *"Show me my Q4 sales data."* The LLM calls your MCP server. But your backend has no cryptographic proof of *which* user is asking. Without identity enforcement, most teams use a shared API key — which means every user sees everyone's data.
+
+This starter solves that with end-to-end OAuth: the user's JWT flows from the LLM client through your MCP server to your backend, verified at every hop. Learn more about the [three-party identity problem](https://gatewaystack.com/docs/three-party-problem).
+
+## Part of GatewayStack
+
+This starter is the quickest way to get a working [GatewayStack](https://github.com/davidcrowe/gatewaystack) server running. GatewayStack is an open-source agentic control plane that makes AI agents enterprise-ready by enforcing user-scoped identity, policy, and audit trails across every tool call.
+
+The full GatewayStack pipeline:
+
+| Layer | Package | This Starter |
+|-------|---------|:------------:|
+| Identity | `@gatewaystack/identifiabl` | Included |
+| Validation | `@gatewaystack/validatabl` | — |
+| Transformation | `@gatewaystack/transformabl` | — |
+| Rate Limiting | `@gatewaystack/limitabl` | — |
+| Proxying | `@gatewaystack/proxyabl` | Included |
+| Observability | `@gatewaystack/explicabl` | Included |
+
+This starter demonstrates the identity + proxy + logging layers. For the full control plane, see the [main GatewayStack repo](https://github.com/davidcrowe/gatewaystack).
 
 ## Quick start
 
@@ -46,7 +67,7 @@ npm run dev
 
 | Layer | What it does | Powered by |
 |-------|-------------|------------|
-| **OAuth discovery** | `/.well-known/*` endpoints so ChatGPT prompts login | built-in |
+| **OAuth discovery** | `/.well-known/*` endpoints so MCP clients prompt login | built-in |
 | **JWT verification** | RS256/JWKS verification of access tokens | `@gatewaystack/identifiabl` |
 | **Scope enforcement** | per-tool scope declarations, deny if missing | built-in |
 | **Identity mapping** | OAuth `sub` → your internal `uid` | built-in |
@@ -104,7 +125,7 @@ src/
 | Route | Method | Purpose |
 |-------|--------|---------|
 | `/mcp` | POST | MCP JSON-RPC (tools/list, tools/call, initialize) |
-| `/.well-known/oauth-protected-resource` | GET | OAuth discovery for ChatGPT |
+| `/.well-known/oauth-protected-resource` | GET | OAuth discovery for MCP clients |
 | `/.well-known/oauth-authorization-server` | GET | OAuth server metadata |
 | `/.well-known/openid-configuration` | GET | OIDC discovery (proxied) |
 | `/` | GET | Health check + service info |
@@ -139,11 +160,20 @@ npm run build     # TypeScript compilation check
 | `401 + invalid_token` | issuer/audience mismatch or JWKS not reachable |
 | `ACCESS_TOKEN_IS_ENCRYPTED_JWE` | auth provider returning JWE instead of JWS |
 | `tools/list keeps prompting OAuth` | `WWW-Authenticate` header or `/.well-known/oauth-protected-resource` misconfigured |
+| Works with ChatGPT but not Claude/other clients | Check that your `/.well-known/oauth-protected-resource` response includes the correct `authorization_endpoint` for your IdP. Different MCP clients may discover OAuth differently |
+
+## What's next
+
+**Add more governance layers:** Install additional GatewayStack modules to add policy enforcement, rate limiting, request transformation, and richer audit trails — all composable with this starter.
+
+**Agentic Control Plane Cloud:** When you need multi-tenant administration, managed deployment, a policy dashboard, and enterprise identity integrations (Auth0, Okta, Entra ID), check out [Agentic Control Plane Cloud](https://agenticcontrolplane.com/product).
+
+**Need help?** We offer consulting and build sessions for teams implementing MCP servers with user-scoped governance. [Book a session](https://reducibl.com)
 
 ## Related
 
+- [GatewayStack](https://github.com/davidcrowe/gatewaystack) — open-source agentic control plane
 - [gatewaystack.com](https://gatewaystack.com) — the governance platform
-- [gatewaystack-connect](https://github.com/davidcrowe/gatewaystack-connect) — multi-tenant MCP gateway
-- [@gatewaystack packages](https://github.com/davidcrowe/GatewayStack) — npm monorepo
+- [@gatewaystack packages](https://www.npmjs.com/org/gatewaystack) — npm modules
 
 Built by [reducibl applied AI studio](https://reducibl.com)

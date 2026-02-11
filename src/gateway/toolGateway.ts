@@ -32,7 +32,9 @@ import {
   OIDC_DISCOVERY,
 } from "../handlers/oauthConfig.js";
 
-console.log("[toolGatewayHandler] module loaded");
+const DEBUG = !!process.env.DEBUG;
+
+if (DEBUG) console.log("[toolGatewayHandler] module loaded");
 
 export { OAUTH_ISSUER, OAUTH_AUDIENCE, OAUTH_SCOPES };
 
@@ -125,7 +127,7 @@ export function getProxyablClientForRequest(req: Request) {
 // ---------- Tool gateway (main handler) ----------
 async function baseToolGatewayImplv3(req: Request, res: Response): Promise<void> {
   setCorsHeaders(res, false);
-  console.log("[rest:req]", { path: (req as any).path ?? req.url, method: req.method });
+  if (DEBUG) console.log("[rest:req]", { path: (req as any).path ?? req.url, method: req.method });
 
   if (req.method === "OPTIONS") {
     res.status(204).end();

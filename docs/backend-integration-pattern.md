@@ -5,8 +5,8 @@
 ```
 ┌──────────┐      ┌──────────┐      ┌──────────────┐      ┌──────────┐
 │          │      │          │      │              │      │          │
-│ ChatGPT  │─────▶│ Gateway  │─────▶│   Backend    │─────▶│   Data   │
-│          │      │  (MCP)   │      │     API      │      │  Store   │
+│   LLM    │─────▶│ Gateway  │─────▶│   Backend    │─────▶│   Data   │
+│ (Client) │      │  (MCP)   │      │     API      │      │  Store   │
 │          │◀─────│          │◀─────│              │◀─────│          │
 └──────────┘      └──────────┘      └──────────────┘      └──────────┘
      │                  │                   │
@@ -432,12 +432,12 @@ curl -X POST http://localhost:3000/mcp \
   }' | jq
 ```
 
-### 4. Test with ChatGPT
+### 4. Test with an MCP Client
 
-1. Configure ChatGPT with your Gateway URL
+1. Configure your MCP client (ChatGPT, Claude, etc.) with your Gateway URL
 2. Complete OAuth flow
 3. Ask: "What tasks do I have?"
-4. ChatGPT calls Gateway → Gateway calls Backend → Backend returns data
+4. The MCP client calls Gateway → Gateway calls Backend → Backend returns data
 
 ---
 
@@ -584,7 +584,7 @@ spec:
 ## Summary
 
 **End-to-End OAuth Pattern:**
-1. ChatGPT gets OAuth token from provider
+1. The MCP client gets an OAuth token from the provider
 2. Gateway receives token, verifies it, forwards to Backend
 3. Backend verifies the same token independently
 4. Both services enforce scopes and user context

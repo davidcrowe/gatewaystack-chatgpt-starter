@@ -1,8 +1,8 @@
 # Implementation Services
 
-Building production-ready ChatGPT integrations with user-scoped access requires expertise in OAuth, MCP, identity mapping, and enterprise security patterns.
+Building production-ready LLM integrations with user-scoped access requires expertise in OAuth, MCP, identity mapping, and enterprise security patterns.
 
-If you need help implementing this for your organization, **[reducibl](https://reducibl.com)** offers implementation services for teams building AI tools on ChatGPT Enterprise.
+If you need help implementing this for your organization, **[reducibl](https://reducibl.com)** offers implementation services for teams building AI tools on ChatGPT, Claude, and other LLM platforms.
 
 ## What We Do
 
@@ -10,12 +10,12 @@ If you need help implementing this for your organization, **[reducibl](https://r
 > services for teams that want expert help, but everything you need 
 > to self-implement is in the documentation.
 
-We help you take your internal tools and data and make them available to your employees in ChatGPT with proper user authentication, authorization, and audit trails.
+We help you take your internal tools and data and make them available to your employees in ChatGPT, Claude, and other LLM platforms — with proper user authentication, authorization, and audit trails.
 
 **Typical engagements include:**
 
-- **ChatGPT MCP server implementation** — Deploy OAuth-protected MCP servers that connect your tools to ChatGPT
-- **Identity & SSO integration** — Connect your existing IdP (Okta, Auth0, Azure AD) to ChatGPT workflows
+- **MCP server implementation** — Deploy OAuth-protected MCP servers that connect your tools to LLM platforms
+- **Identity & SSO integration** — Connect your existing IdP (Okta, Auth0, Azure AD) to LLM workflows
 - **Backend integration patterns** — Design and implement secure user-scoped data access
 - **Security & compliance review** — Audit trail implementation, scope design, policy enforcement
 - **Team training** — Workshops on MCP, OAuth, and AI security patterns
@@ -24,7 +24,7 @@ We help you take your internal tools and data and make them available to your em
 
 - **Enterprise IT teams** adopting ChatGPT Enterprise
 - **Internal AI platform teams** building custom tools
-- **SaaS companies** adding ChatGPT integrations
+- **SaaS companies** adding LLM integrations
 - **Security/compliance teams** requiring audit and governance
 
 ## Common Scenarios
@@ -38,8 +38,8 @@ We help you take your internal tools and data and make them available to your em
 
 ---
 
-### Scenario 2: Multi-Tenant SaaS with ChatGPT Access
-**Challenge:** You have a multi-tenant app and want customers to access their data through ChatGPT, but you can't have users seeing each other's data.
+### Scenario 2: Multi-Tenant SaaS with LLM Access
+**Challenge:** You have a multi-tenant app and want customers to access their data through an LLM, but you can't have users seeing each other's data.
 
 **What we deliver:** End-to-end OAuth implementation with user→tenant mapping, scope enforcement, and secure data filtering.
 
@@ -60,16 +60,16 @@ We help you take your internal tools and data and make them available to your em
 
 ✅ **Production-ready code** — Fork this repo, adapted for your tools and IdP  
 ✅ **Security review** — OAuth configuration, scope design, token verification  
-✅ **Identity mapping** — Connect your existing user system to ChatGPT  
+✅ **Identity mapping** — Connect your existing user system to LLM platforms
 ✅ **Documentation** — Runbooks, architecture diagrams, troubleshooting guides  
 ✅ **Knowledge transfer** — Workshops and pairing sessions with your team  
 
 ## What You Need
 
 We work best with teams that have:
-- ChatGPT Enterprise (or planning to adopt it)
+- ChatGPT Enterprise, Claude, or similar LLM platform (or planning to adopt one)
 - An existing OAuth 2.0 / OIDC identity provider (Auth0, Okta, Azure AD, etc.)
-- Internal tools or data you want to make available via ChatGPT
+- Internal tools or data you want to make available via LLM
 - Basic Node.js / TypeScript capabilities on your team
 
 ## Pricing
@@ -83,7 +83,7 @@ Multiple tools, custom backend integration, team training, ongoing support
 *Includes: Everything in Quick Start + multi-tool deployment, identity mapping, compliance docs, 2-week post-launch support*
 
 **Retainer** — $15,000/month  
-Ongoing development and support for your ChatGPT integration  
+Ongoing development and support for your LLM integration
 *Includes: Feature development, tool additions, security updates, architecture consulting*
 
 Custom scopes available. Contact us to discuss your specific needs.
@@ -124,4 +124,4 @@ A: This starter repo (TypeScript/Node.js) is our default, but we adapt to your s
 
 ---
 
-**Ready to make your tools available in ChatGPT?** [Get in touch →](https://reducibl.com)
+**Ready to make your tools available to LLMs?** [Get in touch →](https://reducibl.com)
