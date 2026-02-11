@@ -1,0 +1,28 @@
+<svg viewBox="0 0 800 210" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: user identity is lost between the LLM and your backend">
+  <rect width="800" height="210" rx="12" fill="#13141f"/>
+  <!-- User node -->
+  <rect x="20" y="40" width="200" height="120" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="120" y="78" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-family="system-ui,sans-serif" font-size="15" font-weight="600">The user</text>
+  <text x="120" y="102" text-anchor="middle" fill="rgba(255,255,255,0.58)" font-family="system-ui,sans-serif" font-size="12">Identity, roles, permissions</text>
+  <text x="120" y="120" text-anchor="middle" fill="rgba(255,255,255,0.58)" font-family="system-ui,sans-serif" font-size="12">Authenticates with LLM</text>
+  <!-- Arrow 1 (JWT) -->
+  <line x1="220" y1="100" x2="290" y2="100" stroke="rgba(79,70,229,0.7)" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="290,95 300,100 290,105" fill="rgba(79,70,229,0.7)"/>
+  <text x="260" y="88" text-anchor="middle" fill="rgba(79,70,229,0.9)" font-family="system-ui,sans-serif" font-size="10" font-weight="600">JWT</text>
+  <!-- LLM node -->
+  <rect x="300" y="40" width="200" height="120" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="400" y="78" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-family="system-ui,sans-serif" font-size="15" font-weight="600">The LLM</text>
+  <text x="400" y="102" text-anchor="middle" fill="rgba(255,255,255,0.58)" font-family="system-ui,sans-serif" font-size="12">Knows who the user is</text>
+  <text x="400" y="120" text-anchor="middle" fill="rgba(255,255,255,0.58)" font-family="system-ui,sans-serif" font-size="12">Forwards with shared API key</text>
+  <!-- Arrow 2 (danger) -->
+  <line x1="500" y1="100" x2="570" y2="100" stroke="rgba(255,77,109,0.7)" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="570,95 580,100 570,105" fill="rgba(255,77,109,0.7)"/>
+  <text x="540" y="88" text-anchor="middle" fill="rgba(255,77,109,0.9)" font-family="system-ui,sans-serif" font-size="10" font-weight="600">API key</text>
+  <!-- Backend node -->
+  <rect x="580" y="40" width="200" height="120" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,77,109,0.18)" stroke-width="1"/>
+  <text x="680" y="78" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-family="system-ui,sans-serif" font-size="15" font-weight="600">Your backend</text>
+  <text x="680" y="102" text-anchor="middle" fill="rgba(255,77,109,0.8)" font-family="system-ui,sans-serif" font-size="12">Can't verify who initiated it</text>
+  <text x="680" y="120" text-anchor="middle" fill="rgba(255,77,109,0.8)" font-family="system-ui,sans-serif" font-size="12">Can't filter, enforce, or audit</text>
+  <!-- Bottom label -->
+  <text x="400" y="195" text-anchor="middle" fill="rgba(255,255,255,0.58)" font-family="system-ui,sans-serif" font-size="12" font-style="italic">Identity is lost between the LLM and your backend</text>
+</svg>

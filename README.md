@@ -21,16 +21,9 @@ A production-ready starter for building MCP servers where **every AI request is 
 
 If your tools need to know _which user_ is calling — not just _that someone_ is calling — this is the pattern.
 
-```
-User (Alice) → LLM (ChatGPT, Claude, etc.) → Your MCP Server (this repo) → Your Backend
-                                                      │
-                                                ┌─────┴─────┐
-                                                │ verify JWT │
-                                                │ check scope│
-                                                │ map sub→uid│
-                                                │ forward tok│
-                                                └────────────┘
-```
+<p align="center">
+  <img src="./assets/three-party-problem.svg" alt="The three-party problem: identity is lost between the LLM and your backend" width="700" />
+</p>
 
 **Example:** A user asks their AI assistant: *"Show me my Q4 sales data."* The LLM calls your MCP server. But your backend has no cryptographic proof of *which* user is asking. Without identity enforcement, most teams use a shared API key — which means every user sees everyone's data.
 
@@ -173,7 +166,7 @@ npm run build     # TypeScript compilation check
 ## Related
 
 - [GatewayStack](https://github.com/davidcrowe/gatewaystack) — open-source agentic control plane
-- [gatewaystack.com](https://gatewaystack.com) — the governance platform
+- [agenticcontrolplane.com](https://agenticcontrolplane.com) — the governance platform
 - [@gatewaystack packages](https://www.npmjs.com/org/gatewaystack) — npm modules
 
 Built by [reducibl applied AI studio](https://reducibl.com)
