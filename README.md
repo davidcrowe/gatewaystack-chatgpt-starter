@@ -13,7 +13,7 @@
 
 <p align="center"><strong>Build your own MCP server with real user identity</strong></p>
 
-<p align="center">A 5-minute starter for building OAuth-protected MCP tool servers with real user-scoped access.<br/>Works with ChatGPT, Claude, and any MCP-compatible client — powered by <a href="https://gatewaystack.com">GatewayStack</a>.</p>
+<p align="center">A 5-minute starter for building OAuth-protected MCP tool servers with real user-scoped access.<br/>Works with ChatGPT, Claude, and any MCP-compatible client — powered by <a href="https://github.com/davidcrowe/GatewayStack">GatewayStack</a>.</p>
 
 ## What this is
 
@@ -27,7 +27,7 @@ If your tools need to know _which user_ is calling — not just _that someone_ i
 
 **Example:** A user asks their AI assistant: *"Show me my Q4 sales data."* The LLM calls your MCP server. But your backend has no cryptographic proof of *which* user is asking. Without identity enforcement, most teams use a shared API key — which means every user sees everyone's data.
 
-This starter solves that with end-to-end OAuth: the user's JWT flows from the LLM client through your MCP server to your backend, verified at every hop. Learn more about the [three-party identity problem](https://gatewaystack.com/docs/three-party-problem).
+This starter solves that with end-to-end OAuth: the user's JWT flows from the LLM client through your MCP server to your backend, verified at every hop. Learn more about the [three-party identity problem](https://reducibl.com/writing/the-three-party-identity-problem-in-mcp-servers).
 
 ## Part of GatewayStack
 
