@@ -52,10 +52,12 @@ function getBearerToken(req: Request): string {
   return auth.slice(7);
 }
 
+const DEBUG = !!process.env.DEBUG;
+
 // === MCP START ===
 export async function handleMcp(req: Request, res: Response) {
   setCorsHeaders(res, true);
-  console.log("[mcp:req]", { path: (req as any).path ?? req.url, method: req.method });
+  if (DEBUG) console.log("[mcp:req]", { path: (req as any).path ?? req.url, method: req.method });
 
   if (req.method === "OPTIONS") {
     res.status(204).end();

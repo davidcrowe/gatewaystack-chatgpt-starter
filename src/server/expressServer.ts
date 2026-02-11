@@ -4,26 +4,6 @@ import { toolGatewayImpl } from "../gateway/toolGateway.js";
 import { createDemoApiRouter } from "../demo-api/server.js";
 
 /**
- * Derive the externally-reachable base URL for this service from the incoming request.
- * Works behind Cloud Run / reverse proxies.
- *
- * Example: https://my-service-abc123.a.run.app
- */
-export function getPublicBaseUrl(req: express.Request): string {
-  const proto = (req.header("x-forwarded-proto") ?? req.protocol)
-    .split(",")[0]
-    .trim();
-
-  const host = (req.header("x-forwarded-host") ?? req.header("host") ?? "")
-    .split(",")[0]
-    .trim();
-
-  if (!host) throw new Error("Missing Host header; cannot derive public base URL");
-
-  return `${proto}://${host}`;
-}
-
-/**
  * Helpful guardrail: detects common misconfig patterns like
  * "http://localhost:${PORT}" that will break in Cloud Run (and break fetch URL parsing).
  */
@@ -97,8 +77,6 @@ export function createApp() {
 
   // Everything else is the MCP gateway
   app.all("*", (req, res) => {
-    // (Optional) expose derived base URL for debugging during integration
-    // console.log("[request] publicBase", getPublicBaseUrl(req));
     return toolGatewayImpl(req as any, res as any);
   });
 

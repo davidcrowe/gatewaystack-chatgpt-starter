@@ -139,7 +139,7 @@ OAUTH_REQUIRED_SCOPES=openid email profile
 1. Go to Google Cloud Console > APIs & Services > Credentials
 2. Create OAuth 2.0 Client ID
 3. Use the Client ID as `OAUTH_AUDIENCE`
-4. Configure authorized redirect URIs for ChatGPT
+4. Configure authorized redirect URIs for your MCP client
 
 ---
 
@@ -260,7 +260,7 @@ ngrok http 3000
 # Example: https://abc123.ngrok.io/callback
 ```
 
-### Testing Without ChatGPT
+### Testing Without an MCP Client
 
 ```bash
 # Get a token from your OAuth provider's test interface
@@ -297,4 +297,4 @@ curl -X POST http://localhost:3000/mcp \
 - [ ] Configure OAuth provider redirect URIs
 - [ ] Test with `curl http://localhost:3000/debug-token`
 - [ ] Verify `.well-known/oauth-protected-resource` returns valid config
-- [ ] Connect to ChatGPT and test OAuth flow
+- [ ] Connect your MCP client and test OAuth flow

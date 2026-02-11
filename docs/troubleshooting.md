@@ -9,7 +9,7 @@
 ### Problem: `401 Unauthorized - Invalid token`
 
 **Symptoms:**
-- ChatGPT keeps prompting for login
+- MCP client keeps prompting for login
 - `tools/list` returns 401
 - Error: "JWT verification failed"
 
@@ -141,12 +141,12 @@ OAUTH_REQUIRED_SCOPES=openid profile  // Global (all requests)
 
 ---
 
-## 🔴 ChatGPT Integration Issues
+## 🔴 MCP Client Integration Issues
 
-### Problem: ChatGPT Keeps Prompting OAuth
+### Problem: MCP Client Keeps Prompting OAuth
 
 **Symptoms:**
-- Login succeeds but ChatGPT prompts again immediately
+- Login succeeds but the MCP client prompts again immediately
 - `WWW-Authenticate` header not recognized
 
 **Solutions:**
@@ -191,11 +191,11 @@ function buildWwwAuthenticate() {
 
 #### 3. Verify OAuth Provider Configuration
 
-ChatGPT requires:
+MCP clients require:
 - ✅ Authorization endpoint (`/authorize`)
 - ✅ Token endpoint (`/token`)
-- ✅ Redirect URI configured for ChatGPT
-- ✅ Client credentials (ChatGPT's client ID)
+- ✅ Redirect URI configured for your MCP client
+- ✅ Client credentials (the MCP client's client ID)
 
 ---
 
@@ -325,7 +325,7 @@ export const TOOL_REGISTRY = {
 #### 3. Inspect MCP Protocol Flow
 
 ```bash
-# ChatGPT sends:
+# The MCP client sends:
 {
   "jsonrpc": "2.0",
   "method": "tools/call",
@@ -414,7 +414,7 @@ https://auth.example.com/.well-known/jwks.json
 
 ## 🔴 Development Environment Issues
 
-### Problem: Cannot Test Without ChatGPT
+### Problem: Cannot Test Without an MCP Client
 
 **Solution: Simulate OAuth Flow Locally**
 

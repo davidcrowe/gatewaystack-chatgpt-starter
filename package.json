@@ -9,6 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server/expressServer.js",
     "test": "vitest run",
+    "setup:auth0": "node scripts/setup-auth0.mjs",
     "lint": "echo \"(add eslint if you want)\""
   },
   "dependencies": {
